@@ -28,6 +28,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(pool.clone()))
             .app_data(web::Data::new(cfg.clone()))
             .service(fs::Files::new("/static", "static").show_files_listing())
+            .service(fs::Files::new("/fox-tpl", "static/fox-tpl"))
             .configure(handlers::routes)
     })
     .bind(&bind_addr)?
