@@ -7,3 +7,7 @@ pub struct IndexTemplate;
 #[derive(Template)]
 #[template(path = "categories.html")]
 pub struct CategoriesTemplate;
+
+#[derive(Template)]
+#[template(path = "channels.html")]
+pub struct ChannelsTemplate;
