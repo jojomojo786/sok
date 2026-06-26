@@ -211,9 +211,17 @@ pub async fn search_help(
     let body = serde_json::to_string(&response)
         .map_err(|e| AppError::Internal(format!("search_help json: {e}")))?;
 
+    // Live pornsok.com serves this JSON-bodied autocomplete response with a
+    // `text/html` content-type and `X-Content-Type-Options: nosniff`. The
+    // mirrored jQuery 3.3.1 header search calls `$.parseJSON(responseText)`,
+    // which expects a raw string. Returning `application/json` would make
+    // jQuery auto-parse the body into an object, so `$.parseJSON` then
+    // double-parses and yields null, leaving the autocomplete empty. Match the
+    // live content-type to keep that client path working in-browser.
     Ok(HttpResponse::Ok()
         .insert_header((HANDLER_MARKER, "search_help"))
-        .content_type("application/json; charset=utf-8")
+        .insert_header(("X-Content-Type-Options", "nosniff"))
+        .content_type("text/html; charset=utf-8")
         .body(body))
 }
 

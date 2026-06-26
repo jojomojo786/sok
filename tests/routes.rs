@@ -303,11 +303,13 @@ async fn post_ajax_search_help_sample_returns_json_contract() {
     let resp = call!(post, "/ajax/search_help", "text=milf");
     assert_eq!(resp.status(), 200);
     assert_eq!(handler_name(&resp).as_deref(), Some("search_help"));
+    // Matches live pornsok.com: JSON body served as `text/html` + `nosniff` so
+    // the mirrored jQuery `$.parseJSON` path works (sok-replica.5.7).
     assert_eq!(
         resp.headers()
             .get("content-type")
             .and_then(|v| v.to_str().ok()),
-        Some("application/json; charset=utf-8")
+        Some("text/html; charset=utf-8")
     );
     let body = test::read_body(resp).await;
     let v: serde_json::Value = serde_json::from_slice(&body).expect("valid json");
