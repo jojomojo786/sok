@@ -16,6 +16,7 @@ This folder captures how the **live site** (https://pornsok.com) behaves and how
 | Doc | Purpose |
 |-----|---------|
 | [local-development.md](./local-development.md) | Run Actix locally, DB config, fixtures, `/health` and `/` checks (**sok-replica.10.3**) |
+| [agent-handoff-validation-checklist.md](./agent-handoff-validation-checklist.md) | Commands to run before closing implementation beads: build/test, route/static/AJAX, browser + perf smoke, Beads close (**sok-replica.9.5**) |
 | [00-codebase-architecture.md](./00-codebase-architecture.md) | Actix + Askama stack, routes, static assets |
 | [01-site-map-and-url-patterns.md](./01-site-map-and-url-patterns.md) | All page types and URL patterns |
 | [02-replica-gap-analysis.md](./02-replica-gap-analysis.md) | What works today vs what's missing |
