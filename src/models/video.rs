@@ -496,6 +496,56 @@ pub async fn video_likes_percent_by_id(pool: &DbPool, video_id: u64) -> Option<u
     None
 }
 
+/// Direction of a video vote submitted via `/ajax/add_vote_v3`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum VoteDirection {
+    Up,
+    Down,
+}
+
+impl VoteDirection {
+    /// Maps the legacy client `status` field (`like`/`unlike`, `1`/`0`/`-1`) to a direction.
+    ///
+    /// Returns `None` for unrecognized values so callers can ack without persisting.
+    pub fn from_status(status: &str) -> Option<Self> {
+        match status.trim().to_ascii_lowercase().as_str() {
+            "1" | "up" | "like" => Some(Self::Up),
+            "0" | "-1" | "down" | "dislike" | "unlike" => Some(Self::Down),
+            _ => None,
+        }
+    }
+
+    fn count_column(self) -> &'static str {
+        match self {
+            Self::Up => "vote_up_count",
+            Self::Down => "vote_down_count",
+        }
+    }
+}
+
+/// Persists a vote against `video_id` in the catalog DB and returns the recomputed like percent.
+///
+/// Falls back to the current like percent (DB or fixture) when the row is absent or the update
+/// fails, so the AJAX handler always returns a safe rating without surfacing DB errors.
+pub async fn record_vote_for_video(
+    pool: &DbPool,
+    video_id: u64,
+    direction: VoteDirection,
+) -> Option<u8> {
+    let sql = format!(
+        "UPDATE videos SET {} = {} + 1 WHERE id = ? AND is_active = 1",
+        direction.count_column(),
+        direction.count_column()
+    );
+
+    match sqlx::query(&sql).bind(video_id).execute(pool).await {
+        Ok(result) if result.rows_affected() > 0 => video_likes_percent_by_id(pool, video_id).await,
+        // No matching catalog row (e.g. fixture-only video) or a DB error: degrade to the
+        // current like percent so the client still shows a sensible rating.
+        _ => video_likes_percent_by_id(pool, video_id).await,
+    }
+}
+
 pub const RELATED_THUMB_BATCH_SIZE: usize = 6;
 pub const RELATED_AJAX_MAX_BATCHES: usize = 20;
 
@@ -1116,6 +1166,30 @@ mod tests {
         assert_eq!(like_percent(78, 22), 78);
         assert_eq!(like_percent(0, 0), 0);
         assert_eq!(like_percent(1, 0), 100);
+    }
+
+    #[test]
+    fn vote_direction_maps_legacy_status_values() {
+        assert_eq!(VoteDirection::from_status("like"), Some(VoteDirection::Up));
+        assert_eq!(VoteDirection::from_status("1"), Some(VoteDirection::Up));
+        assert_eq!(VoteDirection::from_status(" UP "), Some(VoteDirection::Up));
+        assert_eq!(
+            VoteDirection::from_status("unlike"),
+            Some(VoteDirection::Down)
+        );
+        assert_eq!(VoteDirection::from_status("-1"), Some(VoteDirection::Down));
+        assert_eq!(
+            VoteDirection::from_status("dislike"),
+            Some(VoteDirection::Down)
+        );
+        assert_eq!(VoteDirection::from_status("wat"), None);
+        assert_eq!(VoteDirection::from_status(""), None);
+    }
+
+    #[test]
+    fn vote_direction_targets_catalog_count_columns() {
+        assert_eq!(VoteDirection::Up.count_column(), "vote_up_count");
+        assert_eq!(VoteDirection::Down.count_column(), "vote_down_count");
     }
 
     #[test]

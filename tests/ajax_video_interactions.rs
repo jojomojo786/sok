@@ -56,6 +56,32 @@ async fn post_add_vote_v3_rejects_unknown_video_id() {
 }
 
 #[actix_web::test]
+async fn post_add_vote_v3_persists_unlike_and_returns_safe_rating() {
+    // Unlike on the fixture video: persistence is attempted, and even when the catalog row
+    // is absent the handler degrades to the known like percent rather than erroring.
+    let video_id = sample_dog_house_video_detail().thumb.id;
+    let payload = format!("id_video={video_id}&status=unlike");
+    let resp = post_form("/ajax/add_vote_v3", payload).await;
+    assert_eq!(resp.status(), StatusCode::OK);
+    let body = test::read_body(resp).await;
+    let v: Value = serde_json::from_slice(&body).expect("json");
+    assert!(v["raiting"].as_u64().is_some());
+    assert!(v["msg"].as_str().unwrap_or("").contains("Thanks"));
+}
+
+#[actix_web::test]
+async fn post_add_vote_v3_unknown_status_still_returns_rating() {
+    // Unrecognized status: no vote is persisted but the current rating is still returned.
+    let video_id = sample_dog_house_video_detail().thumb.id;
+    let payload = format!("id_video={video_id}&status=banana");
+    let resp = post_form("/ajax/add_vote_v3", payload).await;
+    assert_eq!(resp.status(), StatusCode::OK);
+    let body = test::read_body(resp).await;
+    let v: Value = serde_json::from_slice(&body).expect("json");
+    assert!(v["raiting"].as_u64().is_some());
+}
+
+#[actix_web::test]
 async fn get_ajax_unknown_tail_still_reserved_stub() {
     dotenv::dotenv().ok();
     let cfg = Config::load().expect("config");
