@@ -57,6 +57,7 @@ The app does **not** run migrations automatically on `cargo run`. Apply DDL befo
 Authoritative DDL:
 
 - `migrations/0001_catalog_schema.sql` — full catalog (14 tables)
+- `migrations/0002_align_catalog_search_thumbs.sql` — entity/video column alignment for search/autocomplete
 - `migrations/001_taxonomy.sql` — taxonomy alignment
 
 Details: [catalog-schema.md](./catalog-schema.md).
@@ -65,6 +66,7 @@ Details: [catalog-schema.md](./catalog-schema.md).
 
 ```bash
 mysql -h HOST -P PORT -u USER -p sok < migrations/0001_catalog_schema.sql
+mysql -h HOST -P PORT -u USER -p sok < migrations/0002_align_catalog_search_thumbs.sql
 mysql -h HOST -P PORT -u USER -p sok < migrations/001_taxonomy.sql
 ```
 
@@ -75,7 +77,7 @@ export DATABASE_URL='mysql://...'
 sqlx migrate run
 ```
 
-Note: only `0001_` and `001_` files exist under `migrations/` today; there is no `_sqlx_migrations` table unless you use sqlx migrate.
+Note: there is no `_sqlx_migrations` table unless you use sqlx migrate.
 
 ## 3. Fixture data and fallback behavior
 
@@ -139,7 +141,7 @@ Integration tests in `tests/routes.rs` assert handler mapping (including reserve
 | Process exits immediately on start with config error | Missing/invalid `DATABASE_URL` or password; see `.env.example` and error text from `Config::load()`. |
 | Panic `Failed to create database pool` | Wrong credentials, firewall, or database down. |
 | Home page works but counts look like static sample data | Empty DB — fixture fallback; run `sql/seeds/dev_catalog.sql` after migrations. |
-| SQL errors on listing queries | Schema not applied — run `0001_catalog_schema.sql` and `001_taxonomy.sql`. |
+| SQL errors on listing queries | Schema not applied — run `0001_catalog_schema.sql`, `0002_align_catalog_search_thumbs.sql`, and `001_taxonomy.sql`. |
 
 ## Related docs and beads
 

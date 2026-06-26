@@ -2,6 +2,17 @@
 
 Reference for Rust `sqlx` models and queries. Authoritative DDL: [`migrations/0001_catalog_schema.sql`](../migrations/0001_catalog_schema.sql) and [`migrations/001_taxonomy.sql`](../migrations/001_taxonomy.sql).
 
+> **Entity/video column alignment (sok-replica.3.8):** the `sqlx` models query
+> `pornstars.thumb_path`, `channels.title`, `*.week_views`, and the `videos`
+> columns `views` / `status` / `wide_thumb`. The canonical entity/video column
+> set lives in `ENTITY_SCHEMA_SQL` (`src/models/entities.rs`) and
+> [`sql/schema/videos.sql`](../sql/schema/videos.sql). `0001` predates that and
+> uses `display_name` / `thumb_url` / `view_count`; a catalog provisioned from
+> `0001` (e.g. the live Aiven DB) must apply the additive
+> [`migrations/0002_align_catalog_search_thumbs.sql`](../migrations/0002_align_catalog_search_thumbs.sql)
+> migration so header autocomplete (`/ajax/search_help`) and in-page entity
+> search query the live DB instead of falling back to fixtures.
+
 ## Live database discovery
 
 | Check | Result (2026-06-26) |
