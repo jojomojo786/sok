@@ -34,7 +34,7 @@ SET time_zone = '+00:00';
 SET @ddl = /* pornstars.thumb_path: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'pornstars' AND COLUMN_NAME = 'thumb_path'),
-    "ALTER TABLE pornstars ADD COLUMN thumb_path VARCHAR(512) NOT NULL DEFAULT ''",
+    'ALTER TABLE pornstars ADD COLUMN thumb_path VARCHAR(512) NOT NULL DEFAULT ''''',
     'SELECT 1');
 PREPARE stmt FROM @ddl;
 EXECUTE stmt;
@@ -54,7 +54,7 @@ SET @ddl = /* pornstars.thumb_path <- legacy thumb_url (both columns present) */
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'pornstars' AND COLUMN_NAME = 'thumb_path')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'pornstars' AND COLUMN_NAME = 'thumb_url'),
-    "UPDATE pornstars SET thumb_path = COALESCE(thumb_url, '') WHERE (thumb_path = '' OR thumb_path IS NULL) AND thumb_url IS NOT NULL",
+    'UPDATE pornstars SET thumb_path = COALESCE(thumb_url, '''') WHERE (thumb_path = '''' OR thumb_path IS NULL) AND thumb_url IS NOT NULL',
     'SELECT 1');
 PREPARE stmt FROM @ddl;
 EXECUTE stmt;
@@ -63,7 +63,7 @@ DEALLOCATE PREPARE stmt;
 SET @ddl = /* channels.title: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'title'),
-    "ALTER TABLE channels ADD COLUMN title VARCHAR(255) NOT NULL DEFAULT ''",
+    'ALTER TABLE channels ADD COLUMN title VARCHAR(255) NOT NULL DEFAULT ''''',
     'SELECT 1');
 PREPARE stmt FROM @ddl;
 EXECUTE stmt;
@@ -72,7 +72,7 @@ DEALLOCATE PREPARE stmt;
 SET @ddl = /* channels.thumb_path: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'thumb_path'),
-    "ALTER TABLE channels ADD COLUMN thumb_path VARCHAR(512) NOT NULL DEFAULT ''",
+    'ALTER TABLE channels ADD COLUMN thumb_path VARCHAR(512) NOT NULL DEFAULT ''''',
     'SELECT 1');
 PREPARE stmt FROM @ddl;
 EXECUTE stmt;
@@ -92,7 +92,7 @@ SET @ddl = /* channels.title <- legacy display_name */ IF(
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'title')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'display_name'),
-    "UPDATE channels SET title = display_name WHERE (title = '' OR title IS NULL) AND display_name IS NOT NULL",
+    'UPDATE channels SET title = display_name WHERE (title = '''' OR title IS NULL) AND display_name IS NOT NULL',
     'SELECT 1');
 PREPARE stmt FROM @ddl;
 EXECUTE stmt;
@@ -103,7 +103,7 @@ SET @ddl = /* channels.thumb_path <- legacy thumb_url */ IF(
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'thumb_path')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'thumb_url'),
-    "UPDATE channels SET thumb_path = COALESCE(thumb_url, '') WHERE (thumb_path = '' OR thumb_path IS NULL) AND thumb_url IS NOT NULL",
+    'UPDATE channels SET thumb_path = COALESCE(thumb_url, '''') WHERE (thumb_path = '''' OR thumb_path IS NULL) AND thumb_url IS NOT NULL',
     'SELECT 1');
 PREPARE stmt FROM @ddl;
 EXECUTE stmt;
@@ -130,7 +130,7 @@ DEALLOCATE PREPARE stmt;
 SET @ddl = /* videos.status: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'status'),
-    "ALTER TABLE videos ADD COLUMN status ENUM('published','hidden') NOT NULL DEFAULT 'published'",
+    'ALTER TABLE videos ADD COLUMN status ENUM(''published'',''hidden'') NOT NULL DEFAULT ''published''',
     'SELECT 1');
 PREPARE stmt FROM @ddl;
 EXECUTE stmt;
@@ -163,7 +163,7 @@ SET @ddl = /* videos.status <- legacy is_active */ IF(
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'status')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'is_active'),
-    "UPDATE videos SET status = CASE WHEN is_active = 0 THEN 'hidden' ELSE 'published' END",
+    'UPDATE videos SET status = CASE WHEN is_active = 0 THEN ''hidden'' ELSE ''published'' END',
     'SELECT 1');
 PREPARE stmt FROM @ddl;
 EXECUTE stmt;
