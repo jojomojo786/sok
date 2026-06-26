@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "capture:live-inventory": "node capture-live-inventory.mjs",
+    "capture:local-browser-smoke": "node capture-local-browser-smoke.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.61.1"
+  }
+}

@@ -1,0 +1,5 @@
+POST https://pornsok.com/ajax/add_hit/favourite
+body: (empty)
+status: 200
+bytes: 0
+fetched_utc: 2026-06-26T06:39:55Z

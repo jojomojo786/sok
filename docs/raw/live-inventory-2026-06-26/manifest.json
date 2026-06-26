@@ -1,0 +1,187 @@
+{
+  "captured_at": "2026-06-26T06:40:22.749Z",
+  "tool": "playwright-chromium-headless",
+  "pages": [
+    {
+      "key": "home",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/",
+      "final_url": "https://pornsok.com/",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/home__desktop.png",
+      "snippet": "live-inventory-2026-06-26/home__desktop.json"
+    },
+    {
+      "key": "categories",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/categories",
+      "final_url": "https://pornsok.com/categories",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/categories__desktop.png",
+      "snippet": "live-inventory-2026-06-26/categories__desktop.json"
+    },
+    {
+      "key": "pornstars",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/pornstars",
+      "final_url": "https://pornsok.com/pornstars",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/pornstars__desktop.png",
+      "snippet": "live-inventory-2026-06-26/pornstars__desktop.json"
+    },
+    {
+      "key": "channels",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/channels",
+      "final_url": "https://pornsok.com/channels",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/channels__desktop.png",
+      "snippet": "live-inventory-2026-06-26/channels__desktop.json"
+    },
+    {
+      "key": "category-milf",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/milf",
+      "final_url": "https://pornsok.com/milf",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/category-milf__desktop.png",
+      "snippet": "live-inventory-2026-06-26/category-milf__desktop.json"
+    },
+    {
+      "key": "video-sample",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/video/dog-house-madi-collins-knows-more-sex-than-her-step-bro-decides-to-show-him-what-he-should-do.html",
+      "final_url": "https://pornsok.com/video/dog-house-madi-collins-knows-more-sex-than-her-step-bro-decides-to-show-him-what-he-should-do.html",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/video-sample__desktop.png",
+      "snippet": "live-inventory-2026-06-26/video-sample__desktop.json"
+    },
+    {
+      "key": "channel-brazzers",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/channel/brazzers",
+      "final_url": "https://pornsok.com/channel/brazzers",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/channel-brazzers__desktop.png",
+      "snippet": "live-inventory-2026-06-26/channel-brazzers__desktop.json"
+    },
+    {
+      "key": "pornstar-angela-white",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/pornstar/angela-white",
+      "final_url": "https://pornsok.com/pornstar/angela-white",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/pornstar-angela-white__desktop.png",
+      "snippet": "live-inventory-2026-06-26/pornstar-angela-white__desktop.json"
+    },
+    {
+      "key": "search-test",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/search?q=test",
+      "final_url": "https://pornsok.com/videos/test",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/search-test__desktop.png",
+      "snippet": "live-inventory-2026-06-26/search-test__desktop.json"
+    },
+    {
+      "key": "legal-privacy",
+      "viewport": "desktop",
+      "url": "https://pornsok.com/page/privacy.html",
+      "final_url": "https://pornsok.com/page/privacy.html",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/legal-privacy__desktop.png",
+      "snippet": "live-inventory-2026-06-26/legal-privacy__desktop.json"
+    },
+    {
+      "key": "home",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/",
+      "final_url": "https://pornsok.com/",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/home__mobile.png",
+      "snippet": "live-inventory-2026-06-26/home__mobile.json"
+    },
+    {
+      "key": "categories",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/categories",
+      "final_url": "https://pornsok.com/categories",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/categories__mobile.png",
+      "snippet": "live-inventory-2026-06-26/categories__mobile.json"
+    },
+    {
+      "key": "pornstars",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/pornstars",
+      "final_url": "https://pornsok.com/pornstars",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/pornstars__mobile.png",
+      "snippet": "live-inventory-2026-06-26/pornstars__mobile.json"
+    },
+    {
+      "key": "channels",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/channels",
+      "final_url": "https://pornsok.com/channels",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/channels__mobile.png",
+      "snippet": "live-inventory-2026-06-26/channels__mobile.json"
+    },
+    {
+      "key": "category-milf",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/milf",
+      "final_url": "https://pornsok.com/milf",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/category-milf__mobile.png",
+      "snippet": "live-inventory-2026-06-26/category-milf__mobile.json"
+    },
+    {
+      "key": "video-sample",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/video/dog-house-madi-collins-knows-more-sex-than-her-step-bro-decides-to-show-him-what-he-should-do.html",
+      "final_url": "https://pornsok.com/video/dog-house-madi-collins-knows-more-sex-than-her-step-bro-decides-to-show-him-what-he-should-do.html",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/video-sample__mobile.png",
+      "snippet": "live-inventory-2026-06-26/video-sample__mobile.json"
+    },
+    {
+      "key": "channel-brazzers",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/channel/brazzers",
+      "final_url": "https://pornsok.com/channel/brazzers",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/channel-brazzers__mobile.png",
+      "snippet": "live-inventory-2026-06-26/channel-brazzers__mobile.json"
+    },
+    {
+      "key": "pornstar-angela-white",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/pornstar/angela-white",
+      "final_url": "https://pornsok.com/pornstar/angela-white",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/pornstar-angela-white__mobile.png",
+      "snippet": "live-inventory-2026-06-26/pornstar-angela-white__mobile.json"
+    },
+    {
+      "key": "search-test",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/search?q=test",
+      "final_url": "https://pornsok.com/videos/test",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/search-test__mobile.png",
+      "snippet": "live-inventory-2026-06-26/search-test__mobile.json"
+    },
+    {
+      "key": "legal-privacy",
+      "viewport": "mobile",
+      "url": "https://pornsok.com/page/privacy.html",
+      "final_url": "https://pornsok.com/page/privacy.html",
+      "http_status": 200,
+      "screenshot": "live-inventory-2026-06-26/legal-privacy__mobile.png",
+      "snippet": "live-inventory-2026-06-26/legal-privacy__mobile.json"
+    }
+  ],
+  "errors": []
+}

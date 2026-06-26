@@ -1,0 +1,243 @@
+-- PornsOK replica — catalog schema (sqlx-compatible MySQL 8+)
+-- Source: docs/pages/*, templates/index.html thumb markup, epic sok-replica.3
+--
+-- Live discovery (2026-06-26): DATABASE_URL host reachable; database `sok` has 0 tables.
+-- This migration is the authoritative fallback until production schema is imported.
+
+SET NAMES utf8mb4;
+SET time_zone = '+00:00';
+
+CREATE TABLE categories (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    slug            VARCHAR(191)    NOT NULL,
+    display_name    VARCHAR(255)    NOT NULL,
+    description     TEXT            NULL,
+    thumb_url       VARCHAR(512)    NULL,
+    video_count     INT UNSIGNED    NOT NULL DEFAULT 0,
+    is_featured     TINYINT(1)      NOT NULL DEFAULT 0,
+    sort_order      INT             NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_categories_slug (slug),
+    KEY idx_categories_featured_sort (is_featured, sort_order),
+    KEY idx_categories_video_count (video_count)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE tags (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    slug            VARCHAR(191)    NOT NULL,
+    display_name    VARCHAR(255)    NOT NULL,
+    description     TEXT            NULL,
+    thumb_url       VARCHAR(512)    NULL,
+    video_count     INT UNSIGNED    NOT NULL DEFAULT 0,
+    is_top          TINYINT(1)      NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_tags_slug (slug),
+    KEY idx_tags_top (is_top, video_count)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE channels (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    slug            VARCHAR(191)    NOT NULL,
+    display_name    VARCHAR(255)    NOT NULL,
+    thumb_url       VARCHAR(512)    NULL,
+    banner_url      VARCHAR(512)    NULL,
+    description     TEXT            NULL,
+    network_name    VARCHAR(255)    NULL,
+    video_count     INT UNSIGNED    NOT NULL DEFAULT 0,
+    is_featured     TINYINT(1)      NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_channels_slug (slug),
+    KEY idx_channels_featured (is_featured, video_count)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE pornstars (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    slug            VARCHAR(191)    NOT NULL,
+    display_name    VARCHAR(255)    NOT NULL,
+    thumb_url       VARCHAR(512)    NULL,
+    banner_url      VARCHAR(512)    NULL,
+    bio_html        MEDIUMTEXT      NULL,
+    video_count     INT UNSIGNED    NOT NULL DEFAULT 0,
+    is_featured     TINYINT(1)      NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_pornstars_slug (slug),
+    KEY idx_pornstars_featured (is_featured, video_count)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE videos (
+    id                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    slug                VARCHAR(191)    NOT NULL,
+    title               VARCHAR(512)    NOT NULL,
+    synopsis            TEXT            NULL,
+    duration_seconds    INT UNSIGNED    NOT NULL DEFAULT 0,
+    is_hd               TINYINT(1)      NOT NULL DEFAULT 0,
+    is_active           TINYINT(1)      NOT NULL DEFAULT 1,
+    published_at        DATE            NULL,
+    primary_channel_id  BIGINT UNSIGNED NULL,
+    thumb_url           VARCHAR(512)    NULL,
+    wide_thumb_url      VARCHAR(512)    NULL,
+    preview_mp4_url     VARCHAR(512)    NULL,
+    stream_url          VARCHAR(512)    NULL,
+    is_wide_thumb       TINYINT(1)      NOT NULL DEFAULT 0,
+    view_count          BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    comment_count       INT UNSIGNED    NOT NULL DEFAULT 0,
+    like_percent        TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    vote_up_count       INT UNSIGNED    NOT NULL DEFAULT 0,
+    vote_down_count     INT UNSIGNED    NOT NULL DEFAULT 0,
+    created_at          TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at          TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_videos_slug (slug),
+    KEY idx_videos_published (is_active, published_at DESC, id DESC),
+    KEY idx_videos_views (is_active, view_count DESC, id DESC),
+    KEY idx_videos_comments (is_active, comment_count DESC, id DESC),
+    KEY idx_videos_hd_published (is_active, is_hd, published_at DESC),
+    KEY idx_videos_channel (primary_channel_id),
+    CONSTRAINT fk_videos_primary_channel
+        FOREIGN KEY (primary_channel_id) REFERENCES channels (id)
+        ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE video_categories (
+    video_id        BIGINT UNSIGNED NOT NULL,
+    category_id     BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (video_id, category_id),
+    KEY idx_video_categories_category (category_id, video_id),
+    CONSTRAINT fk_video_categories_video
+        FOREIGN KEY (video_id) REFERENCES videos (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_video_categories_category
+        FOREIGN KEY (category_id) REFERENCES categories (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE video_tags (
+    video_id        BIGINT UNSIGNED NOT NULL,
+    tag_id          BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (video_id, tag_id),
+    KEY idx_video_tags_tag (tag_id, video_id),
+    CONSTRAINT fk_video_tags_video
+        FOREIGN KEY (video_id) REFERENCES videos (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_video_tags_tag
+        FOREIGN KEY (tag_id) REFERENCES tags (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE video_pornstars (
+    video_id        BIGINT UNSIGNED NOT NULL,
+    pornstar_id     BIGINT UNSIGNED NOT NULL,
+    sort_order      SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (video_id, pornstar_id),
+    KEY idx_video_pornstars_star (pornstar_id, video_id),
+    CONSTRAINT fk_video_pornstars_video
+        FOREIGN KEY (video_id) REFERENCES videos (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_video_pornstars_pornstar
+        FOREIGN KEY (pornstar_id) REFERENCES pornstars (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE video_channels (
+    video_id        BIGINT UNSIGNED NOT NULL,
+    channel_id      BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (video_id, channel_id),
+    KEY idx_video_channels_channel (channel_id, video_id),
+    CONSTRAINT fk_video_channels_video
+        FOREIGN KEY (video_id) REFERENCES videos (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_video_channels_channel
+        FOREIGN KEY (channel_id) REFERENCES channels (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE media_assets (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    entity_type     ENUM('video', 'channel', 'pornstar', 'category', 'tag', 'page') NOT NULL,
+    entity_id       BIGINT UNSIGNED NOT NULL,
+    role            ENUM('thumb', 'wide_thumb', 'preview_mp4', 'poster', 'stream', 'download', 'banner') NOT NULL,
+    url             VARCHAR(1024)   NOT NULL,
+    mime_type       VARCHAR(127)    NULL,
+    byte_size       BIGINT UNSIGNED NULL,
+    width           SMALLINT UNSIGNED NULL,
+    height          SMALLINT UNSIGNED NULL,
+    sort_order      SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_media_entity (entity_type, entity_id, role, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE video_downloads (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    video_id        BIGINT UNSIGNED NOT NULL,
+    label           VARCHAR(64)     NOT NULL,
+    url             VARCHAR(1024)   NOT NULL,
+    quality_label   VARCHAR(32)     NULL,
+    sort_order      SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (id),
+    KEY idx_video_downloads_video (video_id, sort_order),
+    CONSTRAINT fk_video_downloads_video
+        FOREIGN KEY (video_id) REFERENCES videos (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE comments (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    video_id        BIGINT UNSIGNED NOT NULL,
+    parent_id       BIGINT UNSIGNED NULL,
+    author_name     VARCHAR(128)    NOT NULL,
+    body_raw        TEXT            NOT NULL,
+    body_html       TEXT            NOT NULL,
+    is_visible      TINYINT(1)      NOT NULL DEFAULT 1,
+    ip_hash         CHAR(64)        NULL,
+    user_agent      VARCHAR(255)    NULL,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_comments_video_created (video_id, is_visible, created_at DESC),
+    KEY idx_comments_parent (parent_id),
+    CONSTRAINT fk_comments_video
+        FOREIGN KEY (video_id) REFERENCES videos (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_comments_parent
+        FOREIGN KEY (parent_id) REFERENCES comments (id)
+        ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE metric_snapshots (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    entity_type     ENUM('video', 'channel', 'pornstar', 'category', 'tag') NOT NULL,
+    entity_id       BIGINT UNSIGNED NOT NULL,
+    period_start    DATE            NOT NULL,
+    period_end      DATE            NOT NULL,
+    view_count      BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    score           DOUBLE          NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_metric_snapshot (entity_type, entity_id, period_start, period_end),
+    KEY idx_metric_period_score (entity_type, period_end, score DESC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE pages (
+    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    slug            VARCHAR(64)     NOT NULL,
+    path            VARCHAR(128)    NOT NULL,
+    title           VARCHAR(255)    NOT NULL,
+    body_html       MEDIUMTEXT      NOT NULL,
+    meta_description VARCHAR(512)   NULL,
+    is_published    TINYINT(1)      NOT NULL DEFAULT 1,
+    nofollow_footer TINYINT(1)      NOT NULL DEFAULT 1,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_pages_slug (slug),
+    UNIQUE KEY uq_pages_path (path)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

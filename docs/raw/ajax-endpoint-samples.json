@@ -1,0 +1,248 @@
+{
+  "source": "https://pornsok.com",
+  "captured_utc": "2026-06-26T06:39:50Z",
+  "notes": [
+    "Read-only POST samples; add_hit/favourite is analytics-only (empty 200).",
+    "Client parses JSON via $.parseJSON for search_* and update_tags; other update_* inject HTML."
+  ],
+  "endpoints": [
+    {
+      "endpoint": "/ajax/search_help",
+      "method": "POST",
+      "request_content_type": "application/x-www-form-urlencoded",
+      "request_body": "text=milf",
+      "http_status": 200,
+      "response_bytes": 2423,
+      "fetched_utc": "2026-06-26T06:39:54Z",
+      "fetched_from": "https://pornsok.com",
+      "response_content_type": "application/json",
+      "response_shape": {
+        "search_text": "string echo of query",
+        "pornstars": [
+          "url_pornstar",
+          "name",
+          "orig_name",
+          "thumb",
+          "count_videos"
+        ],
+        "channels": [
+          "url",
+          "orig_name",
+          "rus_name",
+          "thumb",
+          "count_videos"
+        ],
+        "videos": [
+          "url",
+          "title",
+          "thumb",
+          "widethumb"
+        ]
+      },
+      "response_sample": {
+        "pornstars": [
+          {
+            "url_pornstar": "/pornstar/andrey-and-annette",
+            "name": "Аннет МИЛФ",
+            "orig_name": "Annette MILF",
+            "thumb": "https://c.foxporn.tv/fox-images/pornstars/m-andrey-and-annette.jpg",
+            "count_videos": "19"
+          },
+          {
+            "url_pornstar": "/pornstar/milfetta",
+            "name": "Милфетта",
+            "orig_name": "Milfetta",
+            "thumb": "https://c.foxporn.tv/fox-images/pornstars/m-milfetta.jpg",
+            "count_videos": "2"
+          }
+        ],
+        "channels": [
+          {
+            "url": "/channel/freeuse-milf",
+            "orig_name": "FreeUse Milf",
+            "rus_name": "",
+            "thumb": "https://c.foxporn.tv/fox-images/channels/s-freeuse-milf.jpg",
+            "count_videos": "8"
+          },
+          {
+            "url": "/channel/milf-gonzo",
+            "orig_name": "Milf Gonzo",
+            "rus_name": "",
+            "thumb": "https://c.foxporn.tv/fox-images/channels/s-milf-gonzo.jpg",
+            "count_videos": "15"
+          }
+        ],
+        "videos": [
+          {
+            "url": "/video/after-an-intense-workout-booby-milf-hottie-fucks-her-trainer.html",
+            "title": "After an intense workout, booby MILF hottie fucks her trainer",
+            "thumb": "https://c.foxporn.tv/fox-images/videos/s-after-an-intense-workout-booby-milf-hottie-fucks-her-trainer.jpg",
+            "widethumb": "1"
+          },
+          {
+            "url": "/video/coach-fucked-and-licked-redhead-milfs-pussy-after-practice.html",
+            "title": "Coach fucked and licked redhead MILF's pussy after practice",
+            "thumb": "https://c.foxporn.tv/fox-images/videos/s-coach-fucked-and-licked-redhead-milfs-pussy-after-practice.jpg",
+            "widethumb": "1"
+          }
+        ],
+        "search_text": "milf"
+      }
+    },
+    {
+      "endpoint": "/ajax/search_cats_tags_queries",
+      "method": "POST",
+      "request_content_type": "application/x-www-form-urlencoded",
+      "request_body": "text=milf",
+      "http_status": 200,
+      "response_bytes": 6896,
+      "fetched_utc": "2026-06-26T06:39:54Z",
+      "fetched_from": "https://pornsok.com",
+      "response_content_type": "application/json",
+      "response_shape": {
+        "search_text": "string",
+        "items": [
+          "id",
+          "name",
+          "url"
+        ]
+      },
+      "response_sample": {
+        "items": [
+          {
+            "id": "12941660",
+            "name": "MILF",
+            "url": "/milf"
+          },
+          {
+            "id": "12943497",
+            "name": "milf me",
+            "url": "/videos/milf-me"
+          },
+          {
+            "id": "12944054",
+            "name": "milf bj",
+            "url": "/videos/milf-bj"
+          },
+          {
+            "id": "12956737",
+            "name": "milf cam",
+            "url": "/videos/milf-cam"
+          },
+          {
+            "id": "12955781",
+            "name": "milf boy",
+            "url": "/videos/milf-boy"
+          }
+        ],
+        "search_text": "milf"
+      }
+    },
+    {
+      "endpoint": "/ajax/update_pornstars",
+      "method": "POST",
+      "request_content_type": "none",
+      "request_body": null,
+      "http_status": 200,
+      "response_bytes": 2653,
+      "fetched_utc": "2026-06-26T06:39:54Z",
+      "fetched_from": "https://pornsok.com",
+      "response_content_type": "text/html fragment",
+      "response_shape": {
+        "root_elements": [
+          ".thumb.cat"
+        ],
+        "approx_thumb_count": 30,
+        "uses_data_original": false,
+        "uses_lazy_video": false
+      },
+      "response_sample": " <div class=\"thumb cat\" itemscope itemtype=\"http://schema.org/ImageObject\"> <a href=\"/pornstar/tiffany-tatum\" class=\"thumb-in\" itemprop=\"url\"> <div class=\"thumb-img\"> <img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/pornstars/tiffany-tatum.jpg\" alt=\"Tiffany Tatum\" /> <span class=\"count-videos\"><svg fill=\"#fff\"><use xlink:href=\"#camera-svg\" /></svg>112</span> </div> <div class=\"thumb-title\" itemprop=\"name\">Tiffany Tatum</div> </a> </div> <div class=\"thumb cat\" itemscope itemtype=\"http://schema.org/ImageObject\"> <a href=\"/pornstar/candy-love\" class=\"thumb-in\" itemprop=\"url\"> <div class=\"thumb-img\"> <img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/pornstars/candy-love.jpg\" alt=\"Candy Love\" /> <span class=\"count-videos\"><svg fill=\"#fff\"><use xlink:href=\"#camera-svg\" /></svg>67</span> </div> <div class=\"thumb-title\" itemprop=\"name\">Candy Love</div> </a> </div> <div class=\"thumb cat\" itemscope itemtype=\"http://schema.org/ImageObject\"> <a href=\"/pornstar/onehourcouple\" class=\"thumb-in\" itemprop=\"url\"> <div class=\"thumb-img\"> <img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/pornstars/onehourcouple.jpg\" alt=\"onehourcouple\" /> <span class=\"count-videos\""
+    },
+    {
+      "endpoint": "/ajax/update_channels",
+      "method": "POST",
+      "request_content_type": "none",
+      "request_body": null,
+      "http_status": 200,
+      "response_bytes": 2718,
+      "fetched_utc": "2026-06-26T06:39:55Z",
+      "fetched_from": "https://pornsok.com",
+      "response_content_type": "text/html fragment",
+      "response_shape": {
+        "root_elements": [
+          ".thumb.cat"
+        ],
+        "approx_thumb_count": 30,
+        "uses_data_original": false,
+        "uses_lazy_video": false
+      },
+      "response_sample": " <div class=\"thumb cat\" itemscope itemtype=\"http://schema.org/ImageObject\"> <a href=\"/channel/my-pervy-family\" class=\"thumb-in\" itemprop=\"url\"> <div class=\"thumb-img\"> <img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/channels/my-pervy-family.jpg\" alt=\"My Pervy Family\" /> <span class=\"count-videos\"><svg fill=\"#fff\"><use xlink:href=\"#camera-svg\" /></svg>61</span> </div> <div class=\"thumb-title\" itemprop=\"name\">My Pervy Family</div> </a> </div> <div class=\"thumb cat\" itemscope itemtype=\"http://schema.org/ImageObject\"> <a href=\"/channel/i-fucked-her-finally\" class=\"thumb-in\" itemprop=\"url\"> <div class=\"thumb-img\"> <img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/channels/i-fucked-her-finally.jpg\" alt=\"I Fucked Her Finally\" /> <span class=\"count-videos\"><svg fill=\"#fff\"><use xlink:href=\"#camera-svg\" /></svg>127</span> </div> <div class=\"thumb-title\" itemprop=\"name\">I Fucked Her Finally</div> </a> </div> <div class=\"thumb cat\" itemscope itemtype=\"http://schema.org/ImageObject\"> <a href=\"/channel/teen-mega-world\" class=\"thumb-in\" itemprop=\"url\"> <div class=\"thumb-img\"> <img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/channels/teen-mega-world.jpg\" alt"
+    },
+    {
+      "endpoint": "/ajax/update_tags",
+      "method": "POST",
+      "request_content_type": "none",
+      "request_body": null,
+      "http_status": 200,
+      "response_bytes": 5633,
+      "fetched_utc": "2026-06-26T06:39:55Z",
+      "fetched_from": "https://pornsok.com",
+      "response_content_type": "application/json",
+      "response_shape": {
+        "html": "string (tag list markup)",
+        "preload_before": "string URL prefix",
+        "preload_after": "string suffix",
+        "preload_array": [
+          "slug fragments"
+        ]
+      },
+      "response_sample": {
+        "html": "    <span><i class=\"fa fa-tag\"></i> <a href=\"//busty\" onMouseMove=\"ShowVisualBox(event, 'https://c.foxporn.tv/fox-images/categories/busty-mini.jpg', false, false, 5000, 150, 'Busty')\" onMouseOut=\"HideVisualBox()\">Busty</a></span>\n    <span><i class=\"fa fa-tag\"></i> <a href=\"//real-sex\" onMouseMove=\"ShowVisualBox(event, 'https://c.foxporn.tv/fox-images/categories/real-sex-mini.jpg', false, false, 487, 150, 'Real sex')\" onMouseOut=\"HideVisualBox()\">Real sex</a></span>\n    <span><i class=\"fa fa-tag\"></i> <a href=\"//white-pornstars\" onMouseMove=\"ShowVisualBox(event, 'https://c.foxporn.tv/fox-images/categories/white-pornstars-mini.jpg', false, false, 2175, 150, 'White pornstars')\" onMouseOut=\"HideVisualBox()\">White pornstars</a></span>\n    <span><i class=\"fa fa-tag\"></i> <a href=\"//ukrainian\" o…",
+        "preload_array": [
+          "busty",
+          "real-sex",
+          "white-pornstars",
+          "ukrainian",
+          "tight-pussy"
+        ],
+        "preload_before": "https://c.foxporn.tv/fox-images/categories/",
+        "preload_after": "-mini.jpg"
+      }
+    },
+    {
+      "endpoint": "/ajax/update_watching_now",
+      "method": "POST",
+      "request_content_type": "application/x-www-form-urlencoded",
+      "request_body": "order_by=week_views",
+      "http_status": 200,
+      "response_bytes": 18595,
+      "fetched_utc": "2026-06-26T06:39:55Z",
+      "fetched_from": "https://pornsok.com",
+      "response_content_type": "text/html fragment",
+      "response_shape": {
+        "root_elements": [
+          ".thumb.vid"
+        ],
+        "approx_thumb_count": 84,
+        "uses_data_original": false,
+        "uses_lazy_video": true
+      },
+      "response_sample": " <div class=\"thumb vid\" itemscope=\"\" itemtype=\"http://schema.org/ImageObject\"> <a class=\"thumb-in\" href=\"/video/desi-boy-fuck-sri-lankan-cute-girl.html\" target=\"_blank\" itemprop=\"url\"> <div class=\"thumb-img\"> <div class=\"video-preview\"></div> <img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/videos/desi-boy-fuck-sri-lankan-cute-girl.jpg\" data-video=\"https://c.foxporn.tv/fox-images/videos/m-desi-boy-fuck-sri-lankan-cute-girl.mp4\" alt=\"Desi Boy Fuck Sri Lankan Cute Girl\" /> <div class=\"thumb-meta-top fx-row\"> <span class=\"ttime\" itemprop=\"duration\" content=\"PT247S\">4 min</span> </div> <div class=\"thumb-meta-bottom fx-row\"> <span class=\"tview\"><i class=\"fa fa-eye\"></i>29K</span> <span class=\"tlike\"><svg fill=\"#fff\"><use xlink:href=\"#thumb-up-svg\" /></svg><span>80%</span></span> </div> <meta itemprop=\"datePublished\" content=\"2025-01-15\"> <div itemprop=\"interactionStatistic\" itemscope itemtype=\"http://schema.org/InteractionCounter\"> <link itemprop=\"interactionType\" href=\"http://schema.org/WatchAction\"/> <meta itemprop=\"userInteractionCount\" content=\"29223\"> </div> <div itemprop=\"interactionStatistic\" itemscope itemtype=\"http://schema.org/InteractionCounter\"> <link itemprop=\""
+    },
+    {
+      "endpoint": "/ajax/add_hit/favourite",
+      "method": "POST",
+      "request_content_type": "none",
+      "request_body": null,
+      "http_status": 200,
+      "response_bytes": 0,
+      "fetched_utc": "2026-06-26T06:39:55Z",
+      "fetched_from": "https://pornsok.com",
+      "response_content_type": "empty",
+      "response_shape": {
+        "note": "Zero-length body on HTTP 200; client ignores response"
+      },
+      "response_sample": null
+    }
+  ]
+}
