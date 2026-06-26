@@ -58,3 +58,14 @@ SOK_BASE_URL=http://127.0.0.1:8080 npm run capture:lazy-hover-smoke
 ```
 
 This focused capture verifies home-page `.thumb-cover` lazy loading, `.video-preview` overlays, `data-video` preview URLs, desktop hover preview injection, and mobile tap fallback. See [../lazy-hover-preview-smoke.md](../lazy-hover-preview-smoke.md).
+
+## Run responsive navigation smoke
+
+With the app running (use a free port if `:8080` is taken in this shared workspace):
+
+```bash
+cd docs/raw
+SOK_BASE_URL=http://127.0.0.1:8080 node capture-responsive-navigation-smoke.mjs
+```
+
+This verifies the desktop header, mega menu hover, search expansion, mobile `.btn-mob` side panel, close overlay, and footer logo breakpoint. See [../responsive-navigation-smoke.md](../responsive-navigation-smoke.md).
