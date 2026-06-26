@@ -45,3 +45,16 @@ The script opens `/`, `/categories`, `/pornstars`, and the representative video 
 | `*.body` / `*.meta.txt` | Raw AJAX response bodies |
 
 Synced from beads **sok-replica.1.1** / **sok-replica.1.3**; decisions index: [../04-implementation-decisions.md](../04-implementation-decisions.md).
+
+## Run lazy-load / hover-preview smoke
+
+With the app running on `http://127.0.0.1:8080`:
+
+```bash
+cd docs/raw
+npm install
+npx playwright install chromium
+SOK_BASE_URL=http://127.0.0.1:8080 npm run capture:lazy-hover-smoke
+```
+
+This focused capture verifies home-page `.thumb-cover` lazy loading, `.video-preview` overlays, `data-video` preview URLs, desktop hover preview injection, and mobile tap fallback. See [../lazy-hover-preview-smoke.md](../lazy-hover-preview-smoke.md).
