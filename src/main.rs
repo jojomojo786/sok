@@ -3,32 +3,34 @@ use tikv_jemallocator::Jemalloc;
 #[global_allocator]
 static GLOBAL: Jemalloc = Jemalloc;
 
-mod config;
-mod db;
-mod errors;
-mod handlers;
-mod models;
-mod views;
-
-use actix_web::{web, App, HttpServer, middleware::Compress};
-use actix_files as fs;
+use actix_web::{middleware::Compress, web, App, HttpServer};
+use sok::{config, configure_static, db, handlers, logging};
+use tracing_actix_web::TracingLogger;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
+    logging::init();
 
-    let cfg = config::Config::load();
+    let cfg = match config::Config::load() {
+        Ok(cfg) => cfg,
+        Err(err) => {
+            tracing::error!(error = %err, "configuration load failed");
+            std::process::exit(1);
+        }
+    };
+    tracing::info!(bind = %cfg.bind_addr, db = %cfg.database_log_label(), "starting sok server");
     let pool = db::create_pool(&cfg).await;
 
     let bind_addr = cfg.bind_addr.clone();
 
     HttpServer::new(move || {
         App::new()
+            .wrap(TracingLogger::default())
             .wrap(Compress::default())
             .app_data(web::Data::new(pool.clone()))
             .app_data(web::Data::new(cfg.clone()))
-            .service(fs::Files::new("/static", "static").show_files_listing())
-            .service(fs::Files::new("/fox-tpl", "static/fox-tpl"))
+            .configure(configure_static)
             .configure(handlers::routes)
     })
     .bind(&bind_addr)?
