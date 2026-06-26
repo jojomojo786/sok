@@ -56,6 +56,18 @@ pub fn handler_marker(resp: &actix_web::dev::ServiceResponse) -> Option<&str> {
         .and_then(|v| v.to_str().ok())
 }
 
+pub fn content_type(resp: &actix_web::dev::ServiceResponse) -> Option<&str> {
+    resp.headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+}
+
+pub fn nosniff(resp: &actix_web::dev::ServiceResponse) -> Option<&str> {
+    resp.headers()
+        .get("x-content-type-options")
+        .and_then(|v| v.to_str().ok())
+}
+
 pub async fn json_body(resp: actix_web::dev::ServiceResponse) -> Value {
     let body = test::read_body(resp).await;
     serde_json::from_slice(&body).expect("valid json")

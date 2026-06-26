@@ -73,6 +73,20 @@ pub struct VoteResponse {
 
 const CATS_TAGS_SEARCH_LIMIT: u32 = 80;
 
+/// Build a JSON-bodied response that matches live pornsok.com transport for the
+/// mirrored jQuery 3.3.1 AJAX endpoints. Production serves these JSON payloads
+/// as `text/html; charset=UTF-8` with `X-Content-Type-Options: nosniff` so the
+/// client's `$.parseJSON(responseText)` receives a raw string instead of an
+/// object jQuery already parsed. The body contract is unchanged; only the
+/// transport headers differ from `application/json`.
+fn live_json_response(handler: &'static str, body: String) -> HttpResponse {
+    HttpResponse::Ok()
+        .insert_header((HANDLER_MARKER, handler))
+        .insert_header(("X-Content-Type-Options", "nosniff"))
+        .content_type("text/html; charset=utf-8")
+        .body(body)
+}
+
 pub async fn more_videos_3(
     pool: web::Data<DbPool>,
     form: web::Form<VideoUrlForm>,
@@ -91,10 +105,7 @@ pub async fn more_videos_3(
     let body = serde_json::to_string(&batches)
         .map_err(|e| AppError::Internal(format!("more_videos_3 json: {e}")))?;
 
-    Ok(HttpResponse::Ok()
-        .insert_header((HANDLER_MARKER, "more_videos_3"))
-        .content_type("application/json; charset=utf-8")
-        .body(body))
+    Ok(live_json_response("more_videos_3", body))
 }
 
 pub async fn add_hit_more_videos() -> HttpResponse {
@@ -121,10 +132,7 @@ pub async fn add_vote_v3(
             msg: "Unknown video.".into(),
         })
         .map_err(|e| AppError::Internal(format!("add_vote_v3 json: {e}")))?;
-        return Ok(HttpResponse::Ok()
-            .insert_header((HANDLER_MARKER, "add_vote_v3"))
-            .content_type("application/json; charset=utf-8")
-            .body(body));
+        return Ok(live_json_response("add_vote_v3", body));
     };
 
     let raiting = match VoteDirection::from_status(&form.status) {
@@ -137,10 +145,7 @@ pub async fn add_vote_v3(
     let body = serde_json::to_string(&VoteResponse { raiting, msg })
         .map_err(|e| AppError::Internal(format!("add_vote_v3 json: {e}")))?;
 
-    Ok(HttpResponse::Ok()
-        .insert_header((HANDLER_MARKER, "add_vote_v3"))
-        .content_type("application/json; charset=utf-8")
-        .body(body))
+    Ok(live_json_response("add_vote_v3", body))
 }
 
 fn vote_ack_message(status: &str) -> String {
@@ -174,10 +179,7 @@ pub async fn search_cats_tags_queries(
     let body = serde_json::to_string(&response)
         .map_err(|e| AppError::Internal(format!("search_cats_tags_queries json: {e}")))?;
 
-    Ok(HttpResponse::Ok()
-        .insert_header((HANDLER_MARKER, "search_cats_tags_queries"))
-        .content_type("application/json; charset=utf-8")
-        .body(body))
+    Ok(live_json_response("search_cats_tags_queries", body))
 }
 
 fn should_use_fixture_fallback(resp: &CatsTagsSearchResponse, text: &str) -> bool {
@@ -273,10 +275,7 @@ pub async fn search_entity_page(
     let body = serde_json::to_string(&response)
         .map_err(|e| AppError::Internal(format!("{} json: {e}", search_type.handler_marker())))?;
 
-    Ok(HttpResponse::Ok()
-        .insert_header((HANDLER_MARKER, search_type.handler_marker()))
-        .content_type("application/json; charset=utf-8")
-        .body(body))
+    Ok(live_json_response(search_type.handler_marker(), body))
 }
 
 fn should_use_entity_fixture_fallback(
@@ -329,10 +328,7 @@ pub async fn update_tags(pool: web::Data<DbPool>) -> Result<impl Responder, AppE
     let response = build_update_tags_response(&tags);
     let body = serde_json::to_string(&response)
         .map_err(|e| AppError::Internal(format!("update_tags json: {e}")))?;
-    Ok(HttpResponse::Ok()
-        .insert_header((HANDLER_MARKER, "update_tags"))
-        .content_type("application/json; charset=utf-8")
-        .body(body))
+    Ok(live_json_response("update_tags", body))
 }
 
 pub async fn update_watching_now(

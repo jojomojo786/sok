@@ -37,6 +37,21 @@ async fn post_more_videos_3_returns_json_batches() {
             .and_then(|v| v.to_str().ok()),
         Some("more_videos_3")
     );
+    // Live pornsok.com serves this JSON body as `text/html` + `nosniff` so the
+    // mirrored jQuery 3.3.1 client's `$.parseJSON` receives a raw string (see
+    // sok-replica.5.8).
+    assert_eq!(
+        resp.headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok()),
+        Some("text/html; charset=utf-8")
+    );
+    assert_eq!(
+        resp.headers()
+            .get("x-content-type-options")
+            .and_then(|v| v.to_str().ok()),
+        Some("nosniff")
+    );
     let body = test::read_body(resp).await;
     let v: Value = serde_json::from_slice(&body).expect("valid json");
     assert!(v.is_array());

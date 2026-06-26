@@ -40,6 +40,21 @@ async fn post_add_vote_v3_returns_json_rating_for_known_video() {
             .and_then(|v| v.to_str().ok()),
         Some("add_vote_v3")
     );
+    // Live pornsok.com serves this JSON body as `text/html` + `nosniff` so the
+    // mirrored jQuery 3.3.1 client's `$.parseJSON` receives a raw string (see
+    // sok-replica.5.8).
+    assert_eq!(
+        resp.headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok()),
+        Some("text/html; charset=utf-8")
+    );
+    assert_eq!(
+        resp.headers()
+            .get("x-content-type-options")
+            .and_then(|v| v.to_str().ok()),
+        Some("nosniff")
+    );
     let body = test::read_body(resp).await;
     let v: Value = serde_json::from_slice(&body).expect("json");
     assert_eq!(v["raiting"], 74);
@@ -49,6 +64,22 @@ async fn post_add_vote_v3_returns_json_rating_for_known_video() {
 #[actix_web::test]
 async fn post_add_vote_v3_rejects_unknown_video_id() {
     let resp = post_form("/ajax/add_vote_v3", "id_video=0&status=1".into()).await;
+    assert_eq!(resp.status(), StatusCode::OK);
+    // The invalid-id early return must share the live-compatible transport so
+    // the mirrored jQuery 3.3.1 client's `$.parseJSON` still receives a raw
+    // string (see sok-replica.5.8).
+    assert_eq!(
+        resp.headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok()),
+        Some("text/html; charset=utf-8")
+    );
+    assert_eq!(
+        resp.headers()
+            .get("x-content-type-options")
+            .and_then(|v| v.to_str().ok()),
+        Some("nosniff")
+    );
     let body = test::read_body(resp).await;
     let v: Value = serde_json::from_slice(&body).expect("json");
     assert_eq!(v["raiting"], 0);
