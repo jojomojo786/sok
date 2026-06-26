@@ -59,6 +59,9 @@ Authoritative DDL:
 - `migrations/0001_catalog_schema.sql` — full catalog (14 tables)
 - `migrations/0002_align_catalog_search_thumbs.sql` — entity/video column alignment for search/autocomplete
 - `migrations/001_taxonomy.sql` — taxonomy alignment
+- `migrations/0003_align_taxonomy_search_schema.sql` — taxonomy column alignment (`is_active`/`intro_html`/`weekly_views`) for category/tag search
+
+Apply `0002`/`0003` with a MySQL **text-protocol** client such as Option A `mysql` CLI. Their idempotent `PREPARE`/`EXECUTE` guards are rejected over the binary prepared-statement protocol (error 1295), so they are not streamed through the app's `execute_sql_script` runner — that runner only applies the dev/test `001_taxonomy.sql`, which is already column-complete.
 
 Details: [catalog-schema.md](./catalog-schema.md).
 
@@ -68,9 +71,10 @@ Details: [catalog-schema.md](./catalog-schema.md).
 mysql -h HOST -P PORT -u USER -p sok < migrations/0001_catalog_schema.sql
 mysql -h HOST -P PORT -u USER -p sok < migrations/0002_align_catalog_search_thumbs.sql
 mysql -h HOST -P PORT -u USER -p sok < migrations/001_taxonomy.sql
+mysql -h HOST -P PORT -u USER -p sok < migrations/0003_align_taxonomy_search_schema.sql
 ```
 
-**Option B — sqlx-cli** (install separately: `cargo install sqlx-cli --no-default-features --features mysql`):
+**Option B — sqlx-cli** for future sqlx-compatible migrations only; do not use it for `0002`/`0003` (install separately: `cargo install sqlx-cli --no-default-features --features mysql`):
 
 ```bash
 export DATABASE_URL='mysql://...'
@@ -141,7 +145,7 @@ Integration tests in `tests/routes.rs` assert handler mapping (including reserve
 | Process exits immediately on start with config error | Missing/invalid `DATABASE_URL` or password; see `.env.example` and error text from `Config::load()`. |
 | Panic `Failed to create database pool` | Wrong credentials, firewall, or database down. |
 | Home page works but counts look like static sample data | Empty DB — fixture fallback; run `sql/seeds/dev_catalog.sql` after migrations. |
-| SQL errors on listing queries | Schema not applied — run `0001_catalog_schema.sql`, `0002_align_catalog_search_thumbs.sql`, and `001_taxonomy.sql`. |
+| SQL errors on listing queries | Schema not applied — run `0001_catalog_schema.sql`, `0002_align_catalog_search_thumbs.sql`, `001_taxonomy.sql`, and `0003_align_taxonomy_search_schema.sql`. |
 
 ## Related docs and beads
 
