@@ -22,12 +22,13 @@ use super::common::HANDLER_MARKER;
 
 pub async fn channel_profile(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<String>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
     entity_profile_response(
         pool,
+        cfg,
         path.into_inner(),
         None,
         query,
@@ -39,13 +40,14 @@ pub async fn channel_profile(
 
 pub async fn channel_profile_page(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<(String, u32)>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
     let (slug, page) = path.into_inner();
     entity_profile_response(
         pool,
+        cfg,
         slug,
         Some(page),
         query,
@@ -57,12 +59,13 @@ pub async fn channel_profile_page(
 
 pub async fn pornstar_profile(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<String>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
     entity_profile_response(
         pool,
+        cfg,
         path.into_inner(),
         None,
         query,
@@ -74,13 +77,14 @@ pub async fn pornstar_profile(
 
 pub async fn pornstar_profile_page(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<(String, u32)>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
     let (slug, page) = path.into_inner();
     entity_profile_response(
         pool,
+        cfg,
         slug,
         Some(page),
         query,
@@ -92,13 +96,14 @@ pub async fn pornstar_profile_page(
 
 async fn entity_profile_response(
     pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
     slug: String,
     path_page: Option<u32>,
     query: web::Query<ListingQueryParams>,
     kind: EntityProfileKind,
     handler_marker: &'static str,
 ) -> Result<HttpResponse, AppError> {
-    let layout = SiteLayout::production();
+    let layout = SiteLayout::from_config(cfg.get_ref());
     let listing = match kind {
         EntityProfileKind::Pornstar => {
             ListingKind::EntityProfile(EntityProfileKind::Pornstar, slug.clone())

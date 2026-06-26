@@ -12,7 +12,7 @@ use crate::models::taxonomy::ListingSort;
 use crate::models::video::VideoListSort;
 
 /// CDN host used by mirrored templates (`c.foxporn.tv`).
-pub const DEFAULT_MEDIA_CDN: &str = "https://c.foxporn.tv";
+pub use crate::config::DEFAULT_MEDIA_CDN;
 
 /// Relative image roots on the CDN.
 pub const PORNSTAR_THUMB_DIR: &str = "fox-images/pornstars";

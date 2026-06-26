@@ -9,10 +9,26 @@ use url::Url;
 pub const CONFIG_JSON_PATH: &str = "config.json";
 const DEFAULT_BIND_ADDR: &str = "0.0.0.0:8080";
 
+pub const DEFAULT_MEDIA_CDN: &str = "https://c.foxporn.tv";
+pub const DEFAULT_STATIC_ROOT: &str = "/static";
+pub const DEFAULT_FOX_TPL_ROOT: &str = "/fox-tpl";
+pub const DEFAULT_THUMBS_VIDEOS_DIR: &str = "fox-images/videos";
+pub const DEFAULT_VIDEO_PATH_SEGMENT: &str = "video";
+
 #[derive(Debug, Clone)]
 pub struct Config {
     pub database_url: String,
     pub bind_addr: String,
+    /// CDN host for adult catalog media (thumbs, previews, entity art).
+    pub media_cdn: String,
+    /// Local mount for app static assets (`/static`).
+    pub static_root: String,
+    /// Local mount for mirrored fox-tpl assets (`/fox-tpl`).
+    pub fox_tpl_root: String,
+    /// CDN path segment for video thumb/preview MP4s (appended to `media_cdn`).
+    pub thumbs_videos_dir: String,
+    /// CDN path segment for full-video download placeholders.
+    pub video_path_segment: String,
 }
 
 #[derive(Debug)]
@@ -31,6 +47,9 @@ pub enum ConfigError {
     ConfigFileParse {
         path: String,
         source: serde_json::Error,
+    },
+    InvalidMediaCdn {
+        value: String,
     },
 }
 
@@ -60,6 +79,10 @@ impl fmt::Display for ConfigError {
             ConfigError::ConfigFileParse { path, source } => {
                 write!(f, "Failed to parse config file `{path}` as JSON: {source}")
             }
+            ConfigError::InvalidMediaCdn { value } => write!(
+                f,
+                "MEDIA_CDN must be an http(s) URL (example: {DEFAULT_MEDIA_CDN}); got `{value}`"
+            ),
         }
     }
 }
@@ -83,11 +106,39 @@ impl Config {
     ) -> Result<Self, ConfigError> {
         let bind_addr = resolve_bind_addr(&env)?;
         let database_url = resolve_database_url(&env, config_path)?;
+        let media_cdn = resolve_media_cdn(&env)?;
+        let static_root = resolve_static_root(&env);
+        let fox_tpl_root = resolve_fox_tpl_root(&env);
+        let thumbs_videos_dir = resolve_thumbs_videos_dir(&env);
+        let video_path_segment = resolve_video_path_segment(&env);
 
         Ok(Config {
             database_url: normalize_mysql_url(&database_url)?,
             bind_addr,
+            media_cdn,
+            static_root,
+            fox_tpl_root,
+            thumbs_videos_dir,
+            video_path_segment,
         })
+    }
+
+    /// CDN URL prefix for video thumb/preview assets.
+    pub fn thumbs_videos_url(&self) -> String {
+        media_url(&self.media_cdn, &self.thumbs_videos_dir)
+    }
+
+    /// Asset/CDN defaults used by template render contexts and tests.
+    pub fn asset_defaults() -> Self {
+        Self {
+            database_url: String::new(),
+            bind_addr: DEFAULT_BIND_ADDR.to_string(),
+            media_cdn: DEFAULT_MEDIA_CDN.to_string(),
+            static_root: DEFAULT_STATIC_ROOT.to_string(),
+            fox_tpl_root: DEFAULT_FOX_TPL_ROOT.to_string(),
+            thumbs_videos_dir: DEFAULT_THUMBS_VIDEOS_DIR.to_string(),
+            video_path_segment: DEFAULT_VIDEO_PATH_SEGMENT.to_string(),
+        }
     }
 
     /// Safe database label for logs (no password).
@@ -123,6 +174,66 @@ fn resolve_bind_addr(env: &HashMap<String, String>) -> Result<String, ConfigErro
             reason: err.to_string(),
         })?;
     Ok(raw.to_string())
+}
+
+fn resolve_media_cdn(env: &HashMap<String, String>) -> Result<String, ConfigError> {
+    let raw = env_value(env, "MEDIA_CDN").unwrap_or(DEFAULT_MEDIA_CDN);
+    normalize_media_cdn(raw)
+}
+
+fn resolve_static_root(env: &HashMap<String, String>) -> String {
+    env_value(env, "STATIC_ROOT")
+        .unwrap_or(DEFAULT_STATIC_ROOT)
+        .trim_end_matches('/')
+        .to_string()
+}
+
+fn resolve_fox_tpl_root(env: &HashMap<String, String>) -> String {
+    env_value(env, "FOX_TPL_ROOT")
+        .unwrap_or(DEFAULT_FOX_TPL_ROOT)
+        .trim_end_matches('/')
+        .to_string()
+}
+
+fn resolve_thumbs_videos_dir(env: &HashMap<String, String>) -> String {
+    env_value(env, "THUMBS_VIDEOS_DIR")
+        .unwrap_or(DEFAULT_THUMBS_VIDEOS_DIR)
+        .trim_matches('/')
+        .to_string()
+}
+
+fn resolve_video_path_segment(env: &HashMap<String, String>) -> String {
+    env_value(env, "VIDEO_PATH_SEGMENT")
+        .unwrap_or(DEFAULT_VIDEO_PATH_SEGMENT)
+        .trim_matches('/')
+        .to_string()
+}
+
+fn normalize_media_cdn(raw: &str) -> Result<String, ConfigError> {
+    let trimmed = raw.trim().trim_end_matches('/');
+    let parsed = Url::parse(trimmed).map_err(|_| ConfigError::InvalidMediaCdn {
+        value: raw.to_string(),
+    })?;
+    if parsed.scheme() != "http" && parsed.scheme() != "https" {
+        return Err(ConfigError::InvalidMediaCdn {
+            value: raw.to_string(),
+        });
+    }
+    if parsed.host().is_none() {
+        return Err(ConfigError::InvalidMediaCdn {
+            value: raw.to_string(),
+        });
+    }
+    Ok(trimmed.to_string())
+}
+
+pub fn media_url(cdn_base: &str, path: &str) -> String {
+    let base = cdn_base.trim().trim_end_matches('/');
+    let segment = path.trim().trim_matches('/');
+    if segment.is_empty() {
+        return base.to_string();
+    }
+    format!("{base}/{segment}")
 }
 
 fn resolve_database_url(
@@ -326,6 +437,38 @@ mod tests {
         assert!(message.contains("mysql://"));
         assert!(!message.contains("super_secret_pw"));
         assert!(!message.contains("secret_user"));
+    }
+
+    #[test]
+    fn media_cdn_env_overrides_default() {
+        let env = HashMap::from([
+            (
+                "DATABASE_URL".into(),
+                "mysql://user:pass@db.internal:3306/sok".into(),
+            ),
+            ("MEDIA_CDN".into(), "https://cdn.example.com/".into()),
+        ]);
+        let cfg =
+            Config::load_from_env_and_path(env, Path::new("missing-config.json")).expect("load");
+        assert_eq!(cfg.media_cdn, "https://cdn.example.com");
+        assert_eq!(
+            cfg.thumbs_videos_url(),
+            "https://cdn.example.com/fox-images/videos"
+        );
+    }
+
+    #[test]
+    fn invalid_media_cdn_is_actionable() {
+        let env = HashMap::from([
+            (
+                "DATABASE_URL".into(),
+                "mysql://user:pass@db.internal:3306/sok".into(),
+            ),
+            ("MEDIA_CDN".into(), "not-a-url".into()),
+        ]);
+        let err =
+            Config::load_from_env_and_path(env, Path::new("missing-config.json")).unwrap_err();
+        assert!(err.to_string().contains("MEDIA_CDN"));
     }
 
     #[test]

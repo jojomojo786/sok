@@ -88,7 +88,7 @@ fn listing_templates_render_non_empty_html_from_fixture_backed_context() {
             &sok::models::pagination::SortKey::Entity(
                 sok::models::pagination::EntitySortKey::Trending,
             ),
-            layout.assets.media_cdn,
+            layout.media_cdn.as_str(),
         ),
     }
     .render()

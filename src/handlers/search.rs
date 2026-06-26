@@ -54,25 +54,34 @@ pub async fn search_redirect(
 
 pub async fn videos_search(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<String>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
-    videos_search_response(pool, path.into_inner(), None, query, "videos_search").await
+    videos_search_response(pool, cfg, path.into_inner(), None, query, "videos_search").await
 }
 
 pub async fn videos_search_page(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<(String, u32)>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
     let (query_slug, page) = path.into_inner();
-    videos_search_response(pool, query_slug, Some(page), query, "videos_search_page").await
+    videos_search_response(
+        pool,
+        cfg,
+        query_slug,
+        Some(page),
+        query,
+        "videos_search_page",
+    )
+    .await
 }
 
 async fn videos_search_response(
     pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
     query_slug: String,
     path_page: Option<u32>,
     query: web::Query<ListingQueryParams>,
@@ -88,7 +97,7 @@ async fn videos_search_response(
         return Ok(not_found_page_response(&query_slug, handler));
     }
 
-    let layout = SiteLayout::production();
+    let layout = SiteLayout::from_config(cfg.get_ref());
     let listing = ListingKind::Search {
         query_slug: query_slug.clone(),
     };
