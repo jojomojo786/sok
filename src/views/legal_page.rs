@@ -29,36 +29,36 @@ fn legal_specs() -> HashMap<&'static str, LegalPageSpec> {
         (
             "dmca",
             LegalPageSpec {
-                title: "DMCA - Pornsok.com",
-                description: "DMCA policy for PornsOK.com",
-                h1: "DMCA",
+                title: "DMCA Notice of Copyright Infringement Pornsok.com",
+                description: "DMCA Notice of Copyright Infringement Pornsok.com",
+                h1: "DMCA Notice of Copyright Infringement Pornsok.com",
                 body: include_str!("../../templates/legal/dmca_body.html"),
             },
         ),
         (
             "terms",
             LegalPageSpec {
-                title: "Terms - Pornsok.com",
-                description: "Terms of use for PornsOK.com",
-                h1: "Terms",
+                title: "Terms Of Service | Pornsok.com",
+                description: "Terms and Conditions",
+                h1: "Terms & Conditions - PornsOK.com",
                 body: include_str!("../../templates/legal/terms_body.html"),
             },
         ),
         (
             "2557",
             LegalPageSpec {
-                title: "18 U.S.C. 2257 - Pornsok.com",
-                description: "18 U.S.C. 2257 compliance statement",
-                h1: "18 U.S.C. 2257",
+                title: "18 USC 2257 Statement - Pornsok.com",
+                description: "18 USC 2257 Statement - Pornsok.com",
+                h1: "18 USC 2257 Statement: Pornsok.com",
                 body: include_str!("../../templates/legal/2557_body.html"),
             },
         ),
         (
             "contact",
             LegalPageSpec {
-                title: "Contact - Pornsok.com",
-                description: "Contact PornsOK.com",
-                h1: "Contact",
+                title: "Support and feedback - Pornsok.com",
+                description: "Feedback And Suggestions",
+                h1: "Support and feedback",
                 body: include_str!("../../templates/legal/contact_body.html"),
             },
         ),
@@ -100,6 +100,7 @@ mod tests {
         let layout = SiteLayout::production();
         let ctx = legal_static_context(layout, "privacy").expect("privacy page");
         assert_eq!(ctx.page.title, "Privacy Policy - Pornsok.com");
+        assert_eq!(ctx.page.description, "Privacy Policy");
         assert_eq!(ctx.page.h1, "Privacy Policy - PornsOK.COM");
         assert_eq!(
             ctx.page.canonical_href(&ctx.layout.site_base_url),
@@ -116,5 +117,14 @@ mod tests {
                 "missing context for {slug}"
             );
         }
+    }
+
+    #[test]
+    fn contact_meta_matches_live_capture() {
+        let layout = SiteLayout::production();
+        let ctx = legal_static_context(layout, "contact").expect("contact page");
+        assert_eq!(ctx.page.title, "Support and feedback - Pornsok.com");
+        assert_eq!(ctx.page.description, "Feedback And Suggestions");
+        assert_eq!(ctx.page.h1, "Support and feedback");
     }
 }

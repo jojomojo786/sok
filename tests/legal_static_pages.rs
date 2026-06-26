@@ -56,26 +56,26 @@ async fn legal_pages_return_200_with_meta_and_footer() {
         ),
         (
             "/page/dmca.html",
-            "DMCA - Pornsok.com</title>",
-            "<h1>DMCA</h1>",
+            "DMCA Notice of Copyright Infringement Pornsok.com</title>",
+            "<h1>DMCA Notice of Copyright Infringement Pornsok.com</h1>",
             r#"canonical" href="https://pornsok.com/page/dmca.html""#,
         ),
         (
             "/page/terms.html",
-            "Terms - Pornsok.com</title>",
-            "<h1>Terms</h1>",
+            "Terms Of Service | Pornsok.com</title>",
+            "<h1>Terms &amp; Conditions - PornsOK.com</h1>",
             r#"canonical" href="https://pornsok.com/page/terms.html""#,
         ),
         (
             "/page/2557.html",
-            "18 U.S.C. 2257 - Pornsok.com</title>",
-            "<h1>18 U.S.C. 2257</h1>",
+            "18 USC 2257 Statement - Pornsok.com</title>",
+            "<h1>18 USC 2257 Statement: Pornsok.com</h1>",
             r#"canonical" href="https://pornsok.com/page/2557.html""#,
         ),
         (
             "/page/contact.html",
-            "Contact - Pornsok.com</title>",
-            "<h1>Contact</h1>",
+            "Support and feedback - Pornsok.com</title>",
+            "<h1>Support and feedback</h1>",
             r#"canonical" href="https://pornsok.com/page/contact.html""#,
         ),
     ];
@@ -98,6 +98,16 @@ async fn legal_pages_return_200_with_meta_and_footer() {
         assert_footer_nofollow(&html);
         assert!(!html.contains("stub:page"));
     }
+}
+
+#[actix_web::test]
+async fn legal_page_footer_uses_layout_copyright_year() {
+    let (status, html, _) = get_html("/page/privacy.html").await;
+    assert_eq!(status, 200);
+    assert!(
+        html.contains("© Copyright 2026"),
+        "footer year from SiteLayout::production()"
+    );
 }
 
 #[actix_web::test]
