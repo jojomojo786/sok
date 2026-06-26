@@ -17,28 +17,29 @@ use super::common::HANDLER_MARKER;
 
 pub async fn index(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
-    home_response(pool, None, query, "index").await
+    home_response(pool, cfg, None, query, "index").await
 }
 
 pub async fn home_page_num(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<u32>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
-    home_response(pool, Some(path.into_inner()), query, "home_page_num").await
+    home_response(pool, cfg, Some(path.into_inner()), query, "home_page_num").await
 }
 
 async fn home_response(
     pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
     path_page: Option<u32>,
     query: web::Query<ListingQueryParams>,
     marker: &'static str,
 ) -> Result<HttpResponse, AppError> {
-    let layout = SiteLayout::production();
+    let layout = SiteLayout::from_config(cfg.get_ref());
     let listing = ListingKind::Home;
 
     let path_page_str = path_page.map(|p| p.to_string());

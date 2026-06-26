@@ -1,29 +1,45 @@
 //! Shared Askama render context: layout defaults, asset paths, and per-page SEO meta.
 
+use crate::config::{self, Config};
 use crate::models::pagination::{absolute_url, DEFAULT_SITE_BASE_URL};
 
-pub const DEFAULT_MEDIA_CDN: &str = "https://c.foxporn.tv";
+pub use crate::config::DEFAULT_MEDIA_CDN;
 
-/// Static asset mount paths (must match `build_app` `fs::Files` services).
+/// Static app mounts and adult-catalog CDN paths used by templates and JS globals.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AssetPaths {
-    pub static_root: &'static str,
-    pub fox_tpl_root: &'static str,
-    pub media_cdn: &'static str,
-    pub thumbs_videos_url: &'static str,
-    pub thumbs_videos_dir: &'static str,
-    pub video_path_segment: &'static str,
+    pub static_root: String,
+    pub fox_tpl_root: String,
+    pub media_cdn: String,
+    pub thumbs_videos_url: String,
+    pub thumbs_videos_dir: String,
+    pub video_path_segment: String,
 }
+
+impl AssetPaths {
+    pub fn from_config(cfg: &Config) -> Self {
+        Self {
+            static_root: cfg.static_root.clone(),
+            fox_tpl_root: cfg.fox_tpl_root.clone(),
+            media_cdn: cfg.media_cdn.clone(),
+            thumbs_videos_url: cfg.thumbs_videos_url(),
+            thumbs_videos_dir: cfg.thumbs_videos_dir.clone(),
+            video_path_segment: cfg.video_path_segment.clone(),
+        }
+    }
+
+    pub fn static_fox_tpl_directory(&self) -> String {
+        format!("{}/fox-tpl", self.static_root.trim_end_matches('/'))
+    }
+
+    pub fn fox_tpl_directory(&self) -> String {
+        self.fox_tpl_root.trim_end_matches('/').to_string()
+    }
+}
+
 impl Default for AssetPaths {
     fn default() -> Self {
-        Self {
-            static_root: "/static",
-            fox_tpl_root: "/fox-tpl",
-            media_cdn: DEFAULT_MEDIA_CDN,
-            thumbs_videos_url: "https://c.foxporn.tv/fox-images/videos",
-            thumbs_videos_dir: "fox-images/videos",
-            video_path_segment: "video",
-        }
+        Self::from_config(&Config::asset_defaults())
     }
 }
 
@@ -69,18 +85,31 @@ pub struct SiteLayout {
 }
 
 impl SiteLayout {
-    pub fn production() -> Self {
+    pub fn from_config(cfg: &Config) -> Self {
         Self {
             site_base_url: DEFAULT_SITE_BASE_URL.to_string(),
-            media_cdn: DEFAULT_MEDIA_CDN.to_string(),
-            assets: AssetPaths::default(),
+            media_cdn: cfg.media_cdn.clone(),
+            assets: AssetPaths::from_config(cfg),
             theme: ThemeDefaults::default(),
             copyright_year: 2026,
         }
     }
 
+    pub fn production() -> Self {
+        Self::from_config(&Config::asset_defaults())
+    }
+
     pub fn with_site_base(mut self, site_base_url: impl Into<String>) -> Self {
         self.site_base_url = site_base_url.into();
+        self
+    }
+
+    pub fn with_media_cdn(mut self, media_cdn: impl Into<String>) -> Self {
+        let media_cdn = media_cdn.into();
+        self.media_cdn = media_cdn.clone();
+        self.assets.media_cdn = media_cdn.clone();
+        self.assets.thumbs_videos_url =
+            config::media_url(&media_cdn, &self.assets.thumbs_videos_dir);
         self
     }
 }
@@ -131,6 +160,19 @@ impl RenderContext {
 
     pub fn og_url_absolute(&self) -> String {
         self.page.og_url_absolute(&self.layout.site_base_url)
+    }
+
+    pub fn boot_script(&self) -> String {
+        crate::views::PlayerBootGlobals::listing_page(&self.layout.assets, &self.layout.media_cdn)
+            .to_inline_script()
+    }
+
+    pub fn home_boot_script(&self) -> String {
+        crate::views::PlayerBootGlobals::home_listing_page(
+            &self.layout.assets,
+            &self.layout.media_cdn,
+        )
+        .to_inline_script()
     }
 
     pub fn home_first_page(layout: SiteLayout) -> Self {
@@ -426,6 +468,31 @@ mod tests {
         )
         .unwrap();
         crate::views::HomePageView::build(videos, &spec, total, &layout().site_base_url)
+    }
+
+    #[test]
+    fn home_boot_script_uses_local_static_directory() {
+        let ctx = RenderContext::home_first_page(layout());
+        let script = ctx.home_boot_script();
+        assert!(script.contains("isTHUMBS_OR_PLAYER = true"));
+        assert!(script.contains("directory = \"/static/fox-tpl\""));
+        assert!(script.contains("thumbs_path = \"https://c.foxporn.tv/fox-images/videos\""));
+    }
+
+    #[test]
+    fn listing_boot_script_uses_local_fox_tpl_directory() {
+        let ctx = RenderContext::categories_index(layout());
+        let script = ctx.boot_script();
+        assert!(script.contains("isTHUMBS_OR_PLAYER = false"));
+        assert!(script.contains("directory = \"/fox-tpl\""));
+    }
+
+    #[test]
+    fn configurable_media_cdn_updates_listing_boot_thumbs_path() {
+        let layout = layout().with_media_cdn("https://cdn.example.com/");
+        let ctx = RenderContext::categories_index(layout);
+        let script = ctx.boot_script();
+        assert!(script.contains("thumbs_path = \"https://cdn.example.com/fox-images/videos\""));
     }
 
     #[test]

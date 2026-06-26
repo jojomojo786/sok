@@ -1,6 +1,7 @@
 use actix_web::{http::header, web, HttpResponse, Responder};
 use askama::Template;
 
+use crate::config::Config;
 use crate::db::DbPool;
 use crate::errors::AppError;
 use crate::models::video::normalize_video_slug;
@@ -9,10 +10,11 @@ use super::common::HANDLER_MARKER;
 
 pub async fn video_html(
     pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
     path: web::Path<String>,
 ) -> Result<impl Responder, AppError> {
     let slug = normalize_video_slug(&path.into_inner());
-    let layout = crate::views::SiteLayout::production();
+    let layout = crate::views::SiteLayout::from_config(cfg.get_ref());
     let shell = crate::views::load_video_detail_shell(pool.get_ref(), &slug, layout).await?;
     let html = crate::views::VideoTemplate { shell }
         .render()

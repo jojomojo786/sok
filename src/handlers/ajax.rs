@@ -2,6 +2,7 @@ use actix_web::{web, HttpResponse, Responder};
 
 use serde::{Deserialize, Serialize};
 
+use crate::config::Config;
 use crate::db::DbPool;
 use crate::errors::AppError;
 use crate::fixtures::{
@@ -33,9 +34,9 @@ use crate::models::video::{
 };
 use crate::views::{
     build_update_tags_response, render_channels_widget, render_newest_videos_widget,
-    render_pornstars_widget, render_watching_now_widget, DEFAULT_MEDIA_CDN,
-    HOME_WIDGET_CHANNELS_LIMIT, HOME_WIDGET_NEWEST_DEFAULT_COUNT, HOME_WIDGET_NEWEST_MAX_COUNT,
-    HOME_WIDGET_PORNSTARS_LIMIT, HOME_WIDGET_TAGS_LIMIT, HOME_WIDGET_WATCHING_NOW_LIMIT,
+    render_pornstars_widget, render_watching_now_widget, HOME_WIDGET_CHANNELS_LIMIT,
+    HOME_WIDGET_NEWEST_DEFAULT_COUNT, HOME_WIDGET_NEWEST_MAX_COUNT, HOME_WIDGET_PORNSTARS_LIMIT,
+    HOME_WIDGET_TAGS_LIMIT, HOME_WIDGET_WATCHING_NOW_LIMIT,
 };
 
 use super::common::{stub_response, HANDLER_MARKER};
@@ -224,9 +225,11 @@ pub struct EntitySearchPath {
 
 pub async fn search_entity_page(
     pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
     path: web::Path<EntitySearchPath>,
     form: web::Form<SearchTextForm>,
 ) -> Result<impl Responder, AppError> {
+    let media_cdn = cfg.media_cdn.as_str();
     let Some(search_type) = EntityPageSearchType::parse(&path.search_type) else {
         return Ok(HttpResponse::NotFound()
             .insert_header((HANDLER_MARKER, "ajax"))
@@ -240,25 +243,17 @@ pub async fn search_entity_page(
         search_type,
         text,
         ENTITY_PAGE_SEARCH_LIMIT,
-        DEFAULT_MEDIA_CDN,
+        media_cdn,
     )
     .await
     {
-        Ok(resp) if should_use_entity_fixture_fallback(&resp, text) => entity_page_search_fallback(
-            search_type,
-            text,
-            ENTITY_PAGE_SEARCH_LIMIT,
-            DEFAULT_MEDIA_CDN,
-        )?,
+        Ok(resp) if should_use_entity_fixture_fallback(&resp, text) => {
+            entity_page_search_fallback(search_type, text, ENTITY_PAGE_SEARCH_LIMIT, media_cdn)?
+        }
         Ok(resp) => resp,
         Err(AppError::Db(e)) => {
             log_ajax_db_fallback(search_type.handler_marker(), &e);
-            entity_page_search_fallback(
-                search_type,
-                text,
-                ENTITY_PAGE_SEARCH_LIMIT,
-                DEFAULT_MEDIA_CDN,
-            )?
+            entity_page_search_fallback(search_type, text, ENTITY_PAGE_SEARCH_LIMIT, media_cdn)?
         }
         Err(e) => return Err(e),
     };
@@ -291,18 +286,26 @@ pub struct NewestVideosForm {
     pub count: Option<u32>,
 }
 
-pub async fn update_pornstars(pool: web::Data<DbPool>) -> Result<impl Responder, AppError> {
+pub async fn update_pornstars(
+    pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
+) -> Result<impl Responder, AppError> {
+    let media_cdn = cfg.media_cdn.as_str();
     let cards = load_widget_pornstars(pool.get_ref(), HOME_WIDGET_PORNSTARS_LIMIT).await?;
-    let html = render_pornstars_widget(&cards, DEFAULT_MEDIA_CDN);
+    let html = render_pornstars_widget(&cards, media_cdn);
     Ok(HttpResponse::Ok()
         .insert_header((HANDLER_MARKER, "update_pornstars"))
         .content_type("text/html; charset=utf-8")
         .body(html))
 }
 
-pub async fn update_channels(pool: web::Data<DbPool>) -> Result<impl Responder, AppError> {
+pub async fn update_channels(
+    pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
+) -> Result<impl Responder, AppError> {
+    let media_cdn = cfg.media_cdn.as_str();
     let cards = load_widget_channels(pool.get_ref(), HOME_WIDGET_CHANNELS_LIMIT).await?;
-    let html = render_channels_widget(&cards, DEFAULT_MEDIA_CDN);
+    let html = render_channels_widget(&cards, media_cdn);
     Ok(HttpResponse::Ok()
         .insert_header((HANDLER_MARKER, "update_channels"))
         .content_type("text/html; charset=utf-8")

@@ -1,14 +1,15 @@
 use actix_web::{web, HttpResponse, Responder};
 use askama::Template;
 
+use crate::config::Config;
 use crate::errors::not_found_page_response;
 use crate::views::{legal_page_view, legal_static_context, LegalPageTemplate, SiteLayout};
 
 use super::common::HANDLER_MARKER;
 
-pub async fn page_static(path: web::Path<String>) -> impl Responder {
+pub async fn page_static(cfg: web::Data<Config>, path: web::Path<String>) -> impl Responder {
     let name = path.into_inner();
-    let layout = SiteLayout::production();
+    let layout = SiteLayout::from_config(cfg.get_ref());
     let Some(ctx) = legal_static_context(layout, &name) else {
         return not_found_page_response(&format!("page/{name}.html"), "page_static");
     };

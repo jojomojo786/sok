@@ -2,6 +2,7 @@
 
 use serde::Serialize;
 
+use crate::config::media_url;
 use crate::models::video::{preview_mp4_from_slug, thumb_url_from_slug, VideoDetail};
 use crate::views::{AssetPaths, RenderContext, SiteLayout};
 
@@ -62,9 +63,9 @@ impl PlayerBootGlobals {
             is_player: true,
             lazy_threshold: 2000,
             directory: assets.static_fox_tpl_directory(),
-            thumbs_path: SiteLayout::thumbs_videos_url_from_cdn(thumbs_cdn_base),
-            thumbs_dir: assets.thumbs_videos_dir.to_string(),
-            video_path: assets.video_path_segment.to_string(),
+            thumbs_path: media_url(thumbs_cdn_base, &assets.thumbs_videos_dir),
+            thumbs_dir: assets.thumbs_videos_dir.clone(),
+            video_path: assets.video_path_segment.clone(),
             seb: false,
             first_load: false,
             pjs_v: 17,
@@ -73,6 +74,43 @@ impl PlayerBootGlobals {
             videourl: String::new(),
             id_video: 0,
         }
+    }
+
+    fn base_listing(
+        is_thumbs_or_player: bool,
+        directory: String,
+        assets: &AssetPaths,
+        thumbs_cdn_base: &str,
+    ) -> Self {
+        Self {
+            is_thumbs_or_player,
+            is_player: false,
+            lazy_threshold: 2000,
+            directory,
+            thumbs_path: media_url(thumbs_cdn_base, &assets.thumbs_videos_dir),
+            thumbs_dir: assets.thumbs_videos_dir.clone(),
+            video_path: assets.video_path_segment.clone(),
+            seb: false,
+            first_load: false,
+            pjs_v: 17,
+            screen_mode: 'n',
+            is_mobile: false,
+            videourl: String::new(),
+            id_video: 0,
+        }
+    }
+
+    pub fn listing_page(assets: &AssetPaths, thumbs_cdn_base: &str) -> Self {
+        Self::base_listing(false, assets.fox_tpl_directory(), assets, thumbs_cdn_base)
+    }
+
+    pub fn home_listing_page(assets: &AssetPaths, thumbs_cdn_base: &str) -> Self {
+        Self::base_listing(
+            true,
+            assets.static_fox_tpl_directory(),
+            assets,
+            thumbs_cdn_base,
+        )
     }
 
     pub fn video_page_for_media(
@@ -115,28 +153,12 @@ pub struct VideoPlayerPageContext {
 }
 
 impl SiteLayout {
-    pub fn thumbs_videos_url_from_cdn(media_cdn: &str) -> String {
-        let base = media_cdn.trim().trim_end_matches('/');
-        format!("{base}/fox-images/videos")
-    }
-
     pub fn thumbs_cdn_base(&self) -> &str {
         &self.media_cdn
     }
 
     pub fn thumbs_videos_url(&self) -> String {
-        Self::thumbs_videos_url_from_cdn(&self.media_cdn)
-    }
-
-    pub fn with_media_cdn(mut self, media_cdn: impl Into<String>) -> Self {
-        self.media_cdn = media_cdn.into();
-        self
-    }
-}
-
-impl AssetPaths {
-    pub fn static_fox_tpl_directory(&self) -> String {
-        format!("{}/fox-tpl", self.static_root.trim_end_matches('/'))
+        self.assets.thumbs_videos_url.clone()
     }
 }
 
@@ -237,7 +259,7 @@ pub fn build_player_media(detail: &VideoDetail, layout: &SiteLayout) -> PlayerMe
 
     let download_url = build_download_url(
         cdn_host,
-        layout.assets.video_path_segment,
+        &layout.assets.video_path_segment,
         &slug,
         stream_mode,
     );

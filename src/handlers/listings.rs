@@ -35,9 +35,9 @@ use super::common::HANDLER_MARKER;
 
 pub async fn categories(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
 ) -> Result<impl Responder, AppError> {
-    let layout = SiteLayout::production();
+    let layout = SiteLayout::from_config(cfg.get_ref());
     let page = load_categories_page_data(pool.get_ref(), &layout).await?;
     let ctx = RenderContext::categories_index(layout);
     let html = CategoriesTemplate {
@@ -57,28 +57,28 @@ pub async fn categories(
 
 pub async fn pornstars_list(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
-    pornstars_index_response(pool, _cfg, None, query).await
+    pornstars_index_response(pool, cfg, None, query).await
 }
 
 pub async fn pornstars_list_page(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<u32>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
-    pornstars_index_response(pool, _cfg, Some(path.into_inner()), query).await
+    pornstars_index_response(pool, cfg, Some(path.into_inner()), query).await
 }
 
 async fn pornstars_index_response(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path_page: Option<u32>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<HttpResponse, AppError> {
-    let layout = SiteLayout::production();
+    let layout = SiteLayout::from_config(cfg.get_ref());
     let listing = ListingKind::EntityIndex(EntityIndexKind::Pornstars);
     let path_page_str = path_page.map(|p| p.to_string());
     let path_page_ref = path_page_str.as_deref();
@@ -185,28 +185,28 @@ fn pagination_to_app_error(err: PaginationError) -> AppError {
 
 pub async fn channels_list(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
-    channels_index_response(pool, _cfg, None, query).await
+    channels_index_response(pool, cfg, None, query).await
 }
 
 pub async fn channels_list_page(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<u32>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
-    channels_index_response(pool, _cfg, Some(path.into_inner()), query).await
+    channels_index_response(pool, cfg, Some(path.into_inner()), query).await
 }
 
 async fn channels_index_response(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path_page: Option<u32>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<HttpResponse, AppError> {
-    let layout = SiteLayout::production();
+    let layout = SiteLayout::from_config(cfg.get_ref());
     let listing = ListingKind::EntityIndex(EntityIndexKind::Channels);
     let path_page_str = path_page.map(|p| p.to_string());
     let path_page_ref = path_page_str.as_deref();
@@ -277,8 +277,11 @@ fn sort_fixture_channels(cards: &mut [EntityIndexCard], sort: &SortKey) {
     sort_fixture_pornstars(cards, sort);
 }
 
-pub async fn tags_hub(pool: web::Data<DbPool>) -> Result<impl Responder, AppError> {
-    let layout = SiteLayout::production();
+pub async fn tags_hub(
+    pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
+) -> Result<impl Responder, AppError> {
+    let layout = SiteLayout::from_config(cfg.get_ref());
     let tags = load_tags_hub(pool.get_ref()).await?;
     let ctx = RenderContext::tags_hub(layout);
     let html = TagsTemplate {
@@ -303,31 +306,32 @@ async fn load_tags_hub(pool: &DbPool) -> Result<Vec<TagRow>, AppError> {
 
 pub async fn category_slug(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<String>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
     let slug = path.into_inner();
-    slug_listing_response(pool, &slug, None, query).await
+    slug_listing_response(pool, cfg, &slug, None, query).await
 }
 
 pub async fn category_slug_page(
     pool: web::Data<DbPool>,
-    _cfg: web::Data<Config>,
+    cfg: web::Data<Config>,
     path: web::Path<(String, u32)>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<impl Responder, AppError> {
     let (slug, page) = path.into_inner();
-    slug_listing_response(pool, &slug, Some(page), query).await
+    slug_listing_response(pool, cfg, &slug, Some(page), query).await
 }
 
 async fn slug_listing_response(
     pool: web::Data<DbPool>,
+    cfg: web::Data<Config>,
     slug: &str,
     path_page: Option<u32>,
     query: web::Query<ListingQueryParams>,
 ) -> Result<HttpResponse, AppError> {
-    let layout = SiteLayout::production();
+    let layout = SiteLayout::from_config(cfg.get_ref());
 
     let resolved = resolve_listing_target(pool.get_ref(), slug).await?;
     let Some(target) = resolved else {
