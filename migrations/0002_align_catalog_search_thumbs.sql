@@ -1,34 +1,37 @@
--- PornsOK replica — catalog search/thumbnail alignment (sok-replica.3.8)
---
--- Problem: the live Aiven catalog was provisioned from the original
--- `0001_catalog_schema.sql`, which named entity columns `display_name` /
--- `thumb_url` / `view_count` (videos) and omitted `week_views`. The Rust
--- `sqlx` models, however, query `pornstars.thumb_path`, `channels.title`,
--- `*.week_views`, and the `videos` columns `views` / `status` / `wide_thumb`.
--- Header autocomplete (`/ajax/search_help`) and the in-page entity search
--- therefore failed with `Unknown column 'p.thumb_path' in 'field list'` and
--- silently fell back to bundled fixtures.
---
--- This migration aligns a legacy (`0001`-shaped) catalog to the model schema
--- WITHOUT dropping data. Every statement is additive and idempotent: column
--- adds are guarded against `information_schema`, and backfills only touch rows
--- that are still empty. It is safe to run repeatedly and safe against an
--- already-aligned database. Legacy columns are retained; new columns are
--- backfilled from them where present.
---
--- Compatibility: written as flat statements (no stored procedures, no custom
--- DELIMITER) so it applies cleanly under a real MySQL client AND under the
--- repo's simple `;`-splitting runner (`execute_sql_script`). Each guarded ADD
--- builds its DDL from `information_schema` and runs via PREPARE/EXECUTE.
---
--- Apply per docs/catalog-schema.md. Do not edit `0001_catalog_schema.sql` in
--- place; this is the `0002_*` alignment migration the docs call for.
+SET NAMES utf8mb4 /*
+PornsOK replica -- catalog search/thumbnail alignment (sok-replica.3.8)
 
-SET NAMES utf8mb4;
+Problem: the live Aiven catalog was provisioned from the original
+0001_catalog_schema.sql, which named entity columns display_name /
+thumb_url / view_count (videos) and omitted week_views. The Rust sqlx
+models, however, query pornstars.thumb_path, channels.title, *.week_views,
+and the videos columns views / status / wide_thumb. Header autocomplete
+(/ajax/search_help) and the in-page entity search therefore failed with
+"Unknown column 'p.thumb_path' in 'field list'" and silently fell back to
+the bundled fixtures.
+
+This migration aligns a legacy (0001-shaped) catalog to the model schema
+WITHOUT dropping data. Every statement is additive and idempotent: column
+adds are guarded against information_schema, and backfills only touch rows
+that are still empty. It is safe to run repeatedly and safe against an
+already-aligned database. Legacy columns are retained, and new columns
+are backfilled from them where present.
+
+Compatibility: written as flat statements (no stored procedures, no custom
+DELIMITER). Per-statement documentation uses inline block comments placed
+AFTER the first executable token so the migration applies cleanly under a
+real MySQL client AND under the repo's simple split-on-semicolon runner
+(execute_sql_script), which skips any chunk whose trimmed text starts with
+a line comment. Each guarded ADD builds its DDL from information_schema and
+runs via PREPARE/EXECUTE.
+
+Apply per docs/catalog-schema.md. Do not edit 0001_catalog_schema.sql in
+place. This is the 0002_* alignment migration the docs call for.
+*/;
+
 SET time_zone = '+00:00';
 
--- pornstars.thumb_path -------------------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* pornstars.thumb_path: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'pornstars' AND COLUMN_NAME = 'thumb_path'),
     "ALTER TABLE pornstars ADD COLUMN thumb_path VARCHAR(512) NOT NULL DEFAULT ''",
@@ -37,8 +40,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- pornstars.week_views -------------------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* pornstars.week_views: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'pornstars' AND COLUMN_NAME = 'week_views'),
     'ALTER TABLE pornstars ADD COLUMN week_views BIGINT UNSIGNED NOT NULL DEFAULT 0',
@@ -47,8 +49,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- pornstars.thumb_path <- legacy thumb_url (only when both columns exist) -----
-SET @ddl = IF(
+SET @ddl = /* pornstars.thumb_path <- legacy thumb_url (both columns present) */ IF(
     EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'pornstars' AND COLUMN_NAME = 'thumb_path')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
@@ -59,8 +60,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- channels.title -------------------------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* channels.title: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'title'),
     "ALTER TABLE channels ADD COLUMN title VARCHAR(255) NOT NULL DEFAULT ''",
@@ -69,8 +69,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- channels.thumb_path --------------------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* channels.thumb_path: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'thumb_path'),
     "ALTER TABLE channels ADD COLUMN thumb_path VARCHAR(512) NOT NULL DEFAULT ''",
@@ -79,8 +78,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- channels.week_views --------------------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* channels.week_views: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'week_views'),
     'ALTER TABLE channels ADD COLUMN week_views BIGINT UNSIGNED NOT NULL DEFAULT 0',
@@ -89,8 +87,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- channels.title <- legacy display_name --------------------------------------
-SET @ddl = IF(
+SET @ddl = /* channels.title <- legacy display_name */ IF(
     EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'title')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
@@ -101,8 +98,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- channels.thumb_path <- legacy thumb_url ------------------------------------
-SET @ddl = IF(
+SET @ddl = /* channels.thumb_path <- legacy thumb_url */ IF(
     EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'channels' AND COLUMN_NAME = 'thumb_path')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
@@ -113,8 +109,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- videos.views ---------------------------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* videos.views: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'views'),
     'ALTER TABLE videos ADD COLUMN views BIGINT UNSIGNED NOT NULL DEFAULT 0',
@@ -123,8 +118,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- videos.wide_thumb ----------------------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* videos.wide_thumb: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'wide_thumb'),
     'ALTER TABLE videos ADD COLUMN wide_thumb TINYINT(1) NOT NULL DEFAULT 1',
@@ -133,8 +127,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- videos.status --------------------------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* videos.status: add when missing */ IF(
     NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'status'),
     "ALTER TABLE videos ADD COLUMN status ENUM('published','hidden') NOT NULL DEFAULT 'published'",
@@ -143,8 +136,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- videos.views <- legacy view_count ------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* videos.views <- legacy view_count */ IF(
     EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'views')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
@@ -155,8 +147,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- videos.wide_thumb <- legacy is_wide_thumb ----------------------------------
-SET @ddl = IF(
+SET @ddl = /* videos.wide_thumb <- legacy is_wide_thumb */ IF(
     EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'wide_thumb')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
@@ -167,8 +158,7 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- videos.status <- legacy is_active ------------------------------------------
-SET @ddl = IF(
+SET @ddl = /* videos.status <- legacy is_active */ IF(
     EXISTS (SELECT 1 FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'videos' AND COLUMN_NAME = 'status')
     AND EXISTS (SELECT 1 FROM information_schema.COLUMNS
@@ -179,7 +169,6 @@ PREPARE stmt FROM @ddl;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- Alias tables used by the search LEFT JOINs (created if absent) -------------
 CREATE TABLE IF NOT EXISTS pornstar_aliases (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     pornstar_id BIGINT UNSIGNED NOT NULL,

@@ -157,3 +157,94 @@ fn alignment_migration_adds_search_thumbnail_columns() {
     assert!(migration.contains("UPDATE channels SET title = display_name"));
     assert!(migration.contains("UPDATE videos SET views = view_count"));
 }
+
+/// Splitter-compatibility regression for sok-replica.3.8.
+///
+/// `src/fixtures/mod.rs::execute_sql_script` runs migrations with a naive
+/// `script.split(';')` loop that trims each chunk and skips any chunk whose
+/// trimmed text `starts_with("--")`. An earlier revision of the 0002 migration
+/// placed `-- section` comments immediately before each executable statement,
+/// so after splitting on `;` those chunks began with `--` and were dropped
+/// wholesale -- leaving `@ddl` unset/stale when `PREPARE stmt FROM @ddl` ran.
+///
+/// This test replicates that exact splitter and proves every intended
+/// executable statement survives it (and that no comment prose leaks through
+/// as a statement the runner would try to execute).
+#[test]
+fn alignment_migration_survives_execute_sql_script_splitter() {
+    let migration = include_str!("../migrations/0002_align_catalog_search_thumbs.sql");
+
+    // Exact mirror of execute_sql_script's chunk selection.
+    let executed: Vec<&str> = migration
+        .split(';')
+        .map(str::trim)
+        .filter(|stmt| !stmt.is_empty() && !stmt.starts_with("--"))
+        .collect();
+
+    // 1. Nothing the runner would skip (a `--`-leading chunk) may still contain
+    //    executable SQL -- that is the precise defect being guarded against.
+    let dropped_with_sql = migration
+        .split(';')
+        .map(str::trim)
+        .filter(|stmt| stmt.starts_with("--"))
+        .filter(|stmt| {
+            stmt.lines()
+                .map(str::trim)
+                .any(|line| !line.is_empty() && !line.starts_with("--"))
+        })
+        .count();
+    assert_eq!(
+        dropped_with_sql, 0,
+        "a comment-leading chunk hides executable SQL the splitter will drop"
+    );
+
+    // 2. Every executed chunk must actually start with a SQL keyword, so no
+    //    comment prose (e.g. a `;` inside a `--` line) leaks through as a query.
+    let sql_starts = [
+        "SET ",
+        "PREPARE ",
+        "EXECUTE ",
+        "DEALLOCATE ",
+        "CREATE TABLE",
+        "ALTER ",
+        "UPDATE ",
+        "INSERT ",
+    ];
+    for stmt in &executed {
+        let first = stmt.lines().next().unwrap_or("").trim();
+        assert!(
+            sql_starts.iter().any(|kw| first.starts_with(kw)),
+            "non-SQL chunk would be executed by the splitter: {first:?}"
+        );
+    }
+
+    // 3. The guarded dynamic-DDL trio must all survive intact and balanced, and
+    //    both alias tables must be created. (14 guards = 8 column adds + 6
+    //    backfills.)
+    let count = |prefix: &str| executed.iter().filter(|s| s.starts_with(prefix)).count();
+    assert_eq!(
+        count("SET @ddl"),
+        14,
+        "guarded dynamic statements were dropped"
+    );
+    assert_eq!(count("PREPARE"), 14, "PREPARE statements were dropped");
+    assert_eq!(count("EXECUTE"), 14, "EXECUTE statements were dropped");
+    assert_eq!(
+        count("DEALLOCATE"),
+        14,
+        "DEALLOCATE statements were dropped"
+    );
+    assert_eq!(
+        count("CREATE TABLE"),
+        2,
+        "alias table DDL was dropped by the splitter"
+    );
+
+    // Every PREPARE must be paired with a non-empty @ddl assignment before it,
+    // i.e. there are exactly as many guards as PREPAREs.
+    assert_eq!(
+        count("SET @ddl"),
+        count("PREPARE"),
+        "each PREPARE must be preceded by a surviving SET @ddl guard"
+    );
+}
