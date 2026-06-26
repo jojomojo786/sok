@@ -13,6 +13,16 @@ Reference for Rust `sqlx` models and queries. Authoritative DDL: [`migrations/00
 > migration so header autocomplete (`/ajax/search_help`) and in-page entity
 > search query the live DB instead of falling back to fixtures.
 
+> **Taxonomy column alignment (sok-replica.3.9):** the taxonomy model filters
+> `categories.is_active` / `tags.is_active`, selects `categories.intro_html` /
+> `tags.weekly_views`, and EXISTS-joins `taxonomy_search_aliases`. `001_taxonomy.sql`
+> uses `CREATE TABLE IF NOT EXISTS`, so it never alters a legacy `categories` /
+> `tags` table created before those columns existed; such a DB (e.g. the live
+> Aiven `sok`) must apply the additive
+> [`migrations/0003_align_taxonomy_search_schema.sql`](../migrations/0003_align_taxonomy_search_schema.sql)
+> migration so POST `/ajax/search_cats_tags_queries` queries the live DB instead
+> of logging `Unknown column 'is_active'` and falling back to fixtures.
+
 ## Live database discovery
 
 | Check | Result (2026-06-26) |
