@@ -46,12 +46,24 @@ async fn post_search_pstars_returns_json_with_handler_marker() {
             .and_then(|v| v.to_str().ok()),
         Some("search_pornstars")
     );
+    // Live pornsok.com serves these JSON bodies as `text/html` + `nosniff` so
+    // the mirrored jQuery 3.3.1 client's `$.parseJSON` receives a raw string
+    // (see sok-replica.5.8).
     assert_eq!(
         resp.headers()
             .get("content-type")
             .and_then(|v| v.to_str().ok()),
-        Some("application/json; charset=utf-8")
+        Some("text/html; charset=utf-8")
     );
+    assert_eq!(
+        resp.headers()
+            .get("x-content-type-options")
+            .and_then(|v| v.to_str().ok()),
+        Some("nosniff")
+    );
+    let body = test::read_body(resp).await;
+    let v: Value = serde_json::from_slice(&body).expect("valid json");
+    assert_eq!(v["search_text"].as_str(), Some("ang"));
 }
 
 #[actix_web::test]
@@ -64,6 +76,21 @@ async fn post_search_channels_returns_json_with_handler_marker() {
             .and_then(|v| v.to_str().ok()),
         Some("search_channels")
     );
+    assert_eq!(
+        resp.headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok()),
+        Some("text/html; charset=utf-8")
+    );
+    assert_eq!(
+        resp.headers()
+            .get("x-content-type-options")
+            .and_then(|v| v.to_str().ok()),
+        Some("nosniff")
+    );
+    let body = test::read_body(resp).await;
+    let v: Value = serde_json::from_slice(&body).expect("valid json");
+    assert_eq!(v["search_text"].as_str(), Some("bra"));
 }
 
 #[actix_web::test]

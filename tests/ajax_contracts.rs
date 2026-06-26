@@ -6,7 +6,8 @@ mod common;
 
 use actix_web::http::StatusCode;
 use common::ajax::{
-    assert_object_has_only_keys, handler_marker, json_body, post_form, post_optional_body,
+    assert_object_has_only_keys, content_type, handler_marker, json_body, nosniff, post_form,
+    post_optional_body,
 };
 use sok::fixtures::{load_catalog_seed, search_categories_and_tags_from_seed};
 use sok::models::entities::DEFAULT_MEDIA_CDN;
@@ -25,6 +26,38 @@ const UPDATE_TAGS_KEYS: &[&str] = &["html", "preload_before", "preload_after", "
 
 /// In-page entity search card keys (`#search-page-input` handlers).
 const ENTITY_PAGE_ITEM_KEYS: &[&str] = &["url", "thumb", "orig_name", "count_videos"];
+
+/// Sibling JSON-bodied AJAX endpoints must mirror the live transport: a
+/// `text/html` content-type plus `X-Content-Type-Options: nosniff`, matching
+/// what the mirrored jQuery 3.3.1 `$.parseJSON(responseText)` path expects
+/// (sok-replica.5.7 / sok-replica.5.8). The body still parses as JSON.
+#[actix_web::test]
+async fn live_json_ajax_endpoints_use_text_html_nosniff_transport() {
+    use sok::models::video::fixtures::DOG_HOUSE_SLUG;
+
+    let cases = [
+        ("/ajax/search_help", "text=milf".to_string()),
+        ("/ajax/search_cats_tags_queries", "text=milf".to_string()),
+        ("/ajax/search_pstars", "text=ang".to_string()),
+        ("/ajax/search_channels", "text=bra".to_string()),
+        ("/ajax/update_tags", String::new()),
+        ("/ajax/more_videos_3", format!("videourl={DOG_HOUSE_SLUG}")),
+        ("/ajax/add_vote_v3", "id_video=0&status=1".to_string()),
+    ];
+
+    for (path, payload) in cases {
+        let resp = post_form(path, &payload).await;
+        assert_eq!(resp.status(), StatusCode::OK, "{path} status");
+        assert_eq!(
+            content_type(&resp),
+            Some("text/html; charset=utf-8"),
+            "{path} content-type"
+        );
+        assert_eq!(nosniff(&resp), Some("nosniff"), "{path} nosniff");
+        // Body still deserializes as JSON.
+        let _ = json_body(resp).await;
+    }
+}
 
 #[actix_web::test]
 async fn live_search_help_json_matches_main_min_js_surface() {

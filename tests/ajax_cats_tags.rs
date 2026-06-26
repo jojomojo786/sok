@@ -35,13 +35,27 @@ async fn post_search_cats_tags_returns_json_with_handler_marker() {
             .and_then(|v| v.to_str().ok()),
         Some("search_cats_tags_queries")
     );
+    // Live pornsok.com serves this JSON-bodied autocomplete response as
+    // `text/html` with `nosniff` so the mirrored jQuery 3.3.1 client's
+    // `$.parseJSON(responseText)` receives a raw string (see sok-replica.5.8).
     assert_eq!(
         resp.headers()
             .get("content-type")
             .and_then(|v| v.to_str().ok())
             .map(|s| s.to_string()),
-        Some("application/json; charset=utf-8".to_string())
+        Some("text/html; charset=utf-8".to_string())
     );
+    assert_eq!(
+        resp.headers()
+            .get("x-content-type-options")
+            .and_then(|v| v.to_str().ok()),
+        Some("nosniff")
+    );
+
+    // Body must still parse as JSON for the contract consumers.
+    let body = test::read_body(resp).await;
+    let v: Value = serde_json::from_slice(&body).expect("valid json");
+    assert_eq!(v["search_text"].as_str(), Some("milf"));
 }
 
 #[actix_web::test]
