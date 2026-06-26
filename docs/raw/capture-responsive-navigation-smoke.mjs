@@ -347,11 +347,21 @@ const scenarios = [
       pushCheck(checks, 'search_input_focused', state.mainSearchFocused);
       // Header autocomplete fires POST /ajax/search_help; assert the request reaches
       // the app and returns 200. DOM item rendering depends on the mirrored
-      // main.min.js double-parsing (`$.parseJSON`) the JSON response, which the
-      // app's locked `application/json` contract (sok-replica.5.1) does not satisfy;
-      // see docs/responsive-navigation-smoke.md for that follow-up.
+      // main.min.js calling `$.parseJSON` on the raw response string. The app now
+      // serves this response as `text/html` + `nosniff` to match live pornsok.com
+      // (sok-replica.5.7), so jQuery 3.3.1 does not auto-parse the body and the
+      // single `$.parseJSON` succeeds, letting items render.
       const ajaxStatus = scenarios.find((s) => s.id === 'desktop__search_expand').searchAjax.status;
       pushCheck(checks, 'search_help_request_ok', ajaxStatus === 200, `ajax_status=${ajaxStatus}`);
+      // When the seeded term yields matches, the autocomplete dropdown should
+      // contain at least one rendered <li>. Zero items is only acceptable when
+      // the query legitimately has no matches.
+      pushCheck(
+        checks,
+        'search_help_items_rendered',
+        state.searchItems > 0,
+        `search_items=${state.searchItems}`,
+      );
       return checks;
     },
   },

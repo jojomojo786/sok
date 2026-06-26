@@ -37,11 +37,21 @@ async fn post_search_help_returns_json_with_handler_marker() {
             .and_then(|v| v.to_str().ok()),
         Some("search_help")
     );
+    // Live pornsok.com serves this JSON-bodied autocomplete response as
+    // `text/html` with `nosniff`, which the mirrored jQuery 3.3.1 client relies
+    // on so `$.parseJSON(responseText)` receives a raw string instead of an
+    // already-parsed object (see sok-replica.5.7).
     assert_eq!(
         resp.headers()
             .get("content-type")
             .and_then(|v| v.to_str().ok()),
-        Some("application/json; charset=utf-8")
+        Some("text/html; charset=utf-8")
+    );
+    assert_eq!(
+        resp.headers()
+            .get("x-content-type-options")
+            .and_then(|v| v.to_str().ok()),
+        Some("nosniff")
     );
 }
 
