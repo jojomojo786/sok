@@ -29,8 +29,9 @@ use crate::models::taxonomy::{
 };
 use crate::models::video::fixtures::related_fixture_batches_for_slug;
 use crate::models::video::{
-    list_home_thumbs, list_watching_now_thumbs, normalize_video_slug,
+    list_home_thumbs, list_watching_now_thumbs, normalize_video_slug, record_vote_for_video,
     related_ajax_batches_for_video, video_likes_percent_by_id, VideoListSort, VideoThumb,
+    VoteDirection,
 };
 use crate::views::{
     build_update_tags_response, render_channels_widget, render_newest_videos_widget,
@@ -126,9 +127,12 @@ pub async fn add_vote_v3(
             .body(body));
     };
 
-    let raiting = video_likes_percent_by_id(pool.get_ref(), video_id)
-        .await
-        .unwrap_or(0);
+    let raiting = match VoteDirection::from_status(&form.status) {
+        Some(direction) => record_vote_for_video(pool.get_ref(), video_id, direction).await,
+        // Unrecognized status: don't persist, just report the current rating.
+        None => video_likes_percent_by_id(pool.get_ref(), video_id).await,
+    }
+    .unwrap_or(0);
     let msg = vote_ack_message(&form.status);
     let body = serde_json::to_string(&VoteResponse { raiting, msg })
         .map_err(|e| AppError::Internal(format!("add_vote_v3 json: {e}")))?;
@@ -142,7 +146,7 @@ pub async fn add_vote_v3(
 fn vote_ack_message(status: &str) -> String {
     match status.trim() {
         "1" | "up" | "like" => "Thanks for your vote.".into(),
-        "0" | "-1" | "down" | "dislike" => "Thanks for your feedback.".into(),
+        "0" | "-1" | "down" | "dislike" | "unlike" => "Thanks for your feedback.".into(),
         _ => "Vote recorded locally.".into(),
     }
 }
