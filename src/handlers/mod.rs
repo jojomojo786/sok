@@ -8,18 +8,18 @@ use crate::views::{CategoriesTemplate, IndexTemplate};
 
 async fn index(
     pool: web::Data<DbPool>,
-    cfg: web::Data<Config>,
+    _cfg: web::Data<Config>,
 ) -> Result<impl Responder, AppError> {
-    let _client = pool.get().await?;
+    sqlx::query("SELECT 1").execute(pool.get_ref()).await?;
     let html = IndexTemplate.render().unwrap();
     Ok(HttpResponse::Ok().content_type("text/html").body(html))
 }
 
 async fn categories(
     pool: web::Data<DbPool>,
-    cfg: web::Data<Config>,
+    _cfg: web::Data<Config>,
 ) -> Result<impl Responder, AppError> {
-    let _client = pool.get().await?;
+    sqlx::query("SELECT 1").execute(pool.get_ref()).await?;
     let html = CategoriesTemplate.render().unwrap();
     Ok(HttpResponse::Ok().content_type("text/html").body(html))
 }

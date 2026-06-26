@@ -18,7 +18,7 @@ async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
 
     let cfg = config::Config::load();
-    let pool = db::create_pool(&cfg);
+    let pool = db::create_pool(&cfg).await;
 
     let bind_addr = cfg.bind_addr.clone();
 

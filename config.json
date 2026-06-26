@@ -1,9 +1,9 @@
 {
   "db": {
-    "host": "localhost",
-    "port": 5432,
+    "host": "mysql-1158a03d-wahababdul-bea8.c.aivencloud.com",
+    "port": 22451,
     "database": "sok",
-    "user": "postgres",
-    "password": "sok_password"
+    "user": "avnadmin",
+    "password": ""
   }
 }

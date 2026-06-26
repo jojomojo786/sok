@@ -3,7 +3,7 @@ use std::fmt;
 
 #[derive(Debug)]
 pub enum AppError {
-    Db(deadpool_postgres::PoolError),
+    Db(sqlx::Error),
     Internal(String),
     NotFound(String),
 }
@@ -29,8 +29,8 @@ impl ResponseError for AppError {
     }
 }
 
-impl From<deadpool_postgres::PoolError> for AppError {
-    fn from(e: deadpool_postgres::PoolError) -> Self {
+impl From<sqlx::Error> for AppError {
+    fn from(e: sqlx::Error) -> Self {
         AppError::Db(e)
     }
 }
