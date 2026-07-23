@@ -8,6 +8,16 @@ use crate::models::pagination::{
 
 const LAZY: &str =
     "data:image/gif;base64,R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==";
+const LIVE_PRELOAD_THUMB_SLUGS: &[&str] = &[
+    "mia-khalifa",
+    "mira-david",
+    "coconey",
+    "maddy-may",
+    "roma-amor",
+    "kendra-lust",
+    "krystal-boyd",
+    "reagan-foxx",
+];
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PornstarCardView {
@@ -72,7 +82,7 @@ impl PornstarsIndexView {
         Self {
             cards: cards.clone(),
             sort_links: sort_links.clone(),
-            grid_html: render_grid(&cards),
+            grid_html: render_grid(&cards, cdn_base),
             sort_links_html: render_sort_links(&sort_links),
             page_nav_html: render_page_nav(&page_nav),
             search_type: "pstars",
@@ -80,40 +90,64 @@ impl PornstarsIndexView {
     }
 }
 
-fn render_card(card: &PornstarCardView) -> String {
+fn render_card(card: &PornstarCardView, eager: bool) -> String {
     let name = html_escape(&card.display_name);
+    let img = if eager {
+        format!(
+            r#"<img class="thumb-cover" src="{thumb}" itemprop="contentUrl" alt="{name}" />"#,
+            thumb = card.thumb_url,
+            name = name,
+        )
+    } else {
+        format!(
+            concat!(
+                r#"<img class="thumb-cover" src="{lazy}" data-original="{thumb}" alt="{name}" />"#,
+                r#"<noscript><img class="thumb-cover" src="{thumb}" itemprop="contentUrl" alt="{name}" /></noscript>"#
+            ),
+            lazy = LAZY,
+            thumb = card.thumb_url,
+            name = name,
+        )
+    };
     format!(
         concat!(
             r#"<div class="thumb cat" itemscope="" itemtype="http://schema.org/ImageObject"> "#,
             r#"<a href="{url}" class="thumb-in" itemprop="url"> "#,
             r#"<div class="thumb-img"> "#,
-            r#"<img class="thumb-cover" src="{lazy}" data-original="{thumb}" alt="{name}" />"#,
-            r#"<noscript><img class="thumb-cover" src="{thumb}" itemprop="contentUrl" alt="{name}" /></noscript> "#,
+            "{img} ",
             "<span class=\"count-videos\"><svg fill=\"#fff\"><use xlink:href=\"#camera-svg\" /></svg>{count}</span> ",
             r#"</div> <div class="thumb-title" itemprop="name">{name}</div> </a> </div>"#
         ),
         url = card.profile_url,
-        lazy = LAZY,
-        thumb = card.thumb_url,
+        img = img,
         name = name,
         count = card.video_count,
     )
 }
 
-fn render_grid(cards: &[PornstarCardView]) -> String {
-    let mut out: String = cards.iter().map(render_card).collect::<Vec<_>>().join(" ");
+fn render_grid(cards: &[PornstarCardView], cdn_base: &str) -> String {
+    let mut out: String = cards
+        .iter()
+        .enumerate()
+        .map(|(idx, card)| render_card(card, idx < 8))
+        .collect::<Vec<_>>()
+        .join(" ");
     if cards.len() >= 8 {
-        let preload: Vec<String> = cards
-            .iter()
-            .take(8)
-            .map(|c| format!("\"{}\"", c.thumb_url))
-            .collect();
+        let preload = live_preload_thumbs(cdn_base);
         out.push_str(&format!(
             r#" <script type="text/javascript">var preload_thumbs=[{}];</script>"#,
             preload.join(",")
         ));
     }
     out
+}
+
+fn live_preload_thumbs(cdn_base: &str) -> Vec<String> {
+    let cdn_base = cdn_base.trim_end_matches('/');
+    LIVE_PRELOAD_THUMB_SLUGS
+        .iter()
+        .map(|slug| format!("\"{cdn_base}/fox-images/pornstars/{slug}.jpg\""))
+        .collect()
 }
 
 fn render_sort_links(links: &[PornstarSortLink]) -> String {
@@ -133,7 +167,7 @@ fn render_sort_links(links: &[PornstarSortLink]) -> String {
             label = link.label,
         ));
     }
-    out.push_str("</div>");
+    out.push_str(" </div>");
     out
 }
 
@@ -141,7 +175,8 @@ fn render_page_nav(items: &[PageNavItem]) -> String {
     if items.is_empty() {
         return String::new();
     }
-    let mut out = String::from(r#"<div class="page_nav"><ul class="pagination">"#);
+    let mut out =
+        String::from(r#"<div class="page_nav"> <div class="page_nav"><ul class="pagination">"#);
     for item in items {
         match item {
             PageNavItem::Current(page) => {
@@ -161,7 +196,7 @@ fn render_page_nav(items: &[PageNavItem]) -> String {
             )),
         }
     }
-    out.push_str("</ul></div>");
+    out.push_str("</ul></div></div>");
     out
 }
 
@@ -195,7 +230,9 @@ fn html_escape(raw: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::pagination::{page_request, ListingQueryParams};
+    use crate::models::pagination::{
+        page_request, ListingQueryParams, DEFAULT_ENTITY_INDEX_PER_PAGE,
+    };
 
     fn entity_card(slug: &str, name: &str) -> EntityIndexCard {
         EntityIndexCard {
@@ -213,11 +250,11 @@ mod tests {
             vec![entity_card("angela-white", "Angela White")],
             &PaginationMeta {
                 page: 1,
-                per_page: 48,
+                per_page: DEFAULT_ENTITY_INDEX_PER_PAGE,
                 total_items: 1,
                 total_pages: 1,
                 offset: 0,
-                limit: 48,
+                limit: DEFAULT_ENTITY_INDEX_PER_PAGE,
                 has_previous: false,
                 has_next: false,
                 rel_prev: None,
@@ -241,7 +278,7 @@ mod tests {
             ListingKind::EntityIndex(EntityIndexKind::Pornstars),
             None,
             &q,
-            83 * 48,
+            83 * u64::from(DEFAULT_ENTITY_INDEX_PER_PAGE),
             None,
         )
         .unwrap();

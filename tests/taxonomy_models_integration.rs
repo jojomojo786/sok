@@ -25,6 +25,10 @@ fn categories_index_card_shape_matches_docs() {
         thumb_url: format!("{CATEGORY_THUMB_CDN_PREFIX}milf.jpg"),
         video_count: 100,
         listing_url: "/milf".into(),
+        link_title: None,
+        alt_text: "MILF porn videos".into(),
+        lazy: false,
+        uses_tags_icon: false,
     };
     assert_eq!(card.listing_url, "/milf");
     assert!(card.thumb_url.contains("fox-images/categories"));

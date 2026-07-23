@@ -2,7 +2,8 @@
 
 use askama::Template;
 use sok::fixtures::{
-    load_catalog_seed, seed_category_cards, seed_home_thumbs, seed_pornstar_cards, DEV_CATALOG_SQL,
+    live_channel_index_cards, live_pornstar_index_cards, load_catalog_seed, seed_category_cards,
+    seed_home_thumbs, seed_pornstar_cards, DEV_CATALOG_SQL,
 };
 use sok::views::{
     categories_page_from_fixture_seed, CategoriesTemplate, IndexTemplate, PornstarsIndexView,
@@ -83,7 +84,10 @@ fn listing_templates_render_non_empty_html_from_fixture_backed_context() {
     let pornstars_html = PornstarsTemplate {
         ctx: RenderContext::pornstars_index(layout.clone(), &meta),
         pornstars: PornstarsIndexView::build(
-            cards.into_iter().take(48).collect(),
+            cards
+                .into_iter()
+                .take(sok::models::pagination::DEFAULT_ENTITY_INDEX_PER_PAGE as usize)
+                .collect(),
             &meta,
             &sok::models::pagination::SortKey::Entity(
                 sok::models::pagination::EntitySortKey::Trending,
@@ -104,4 +108,19 @@ fn sql_seed_file_matches_json_fixture_slugs() {
     assert!(DEV_CATALOG_SQL.contains(&seed.videos[0].slug));
     assert!(DEV_CATALOG_SQL.contains(&seed.categories[0].slug));
     assert!(DEV_CATALOG_SQL.contains(&seed.pornstars[0].slug));
+}
+
+#[test]
+fn live_entity_index_fixture_matches_first_page_card_targets() {
+    let pornstars = live_pornstar_index_cards().expect("live pornstar index seed");
+    let channels = live_channel_index_cards().expect("live channel index seed");
+
+    assert_eq!(pornstars.len(), 60);
+    assert_eq!(channels.len(), 60);
+    assert!(pornstars
+        .iter()
+        .all(|card| card.thumb_path.starts_with("https://")));
+    assert!(channels
+        .iter()
+        .all(|card| card.thumb_path.starts_with("https://")));
 }

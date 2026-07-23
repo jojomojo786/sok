@@ -5,8 +5,8 @@ use crate::models::taxonomy::{CategoryRow, TagRow, CATEGORY_THUMB_CDN_PREFIX};
 use crate::models::video::VideoThumb;
 use serde::Serialize;
 
-pub const HOME_WIDGET_PORNSTARS_LIMIT: u32 = 30;
-pub const HOME_WIDGET_CHANNELS_LIMIT: u32 = 30;
+pub const HOME_WIDGET_PORNSTARS_LIMIT: u32 = 6;
+pub const HOME_WIDGET_CHANNELS_LIMIT: u32 = 6;
 pub const HOME_WIDGET_TAGS_LIMIT: u32 = 24;
 pub const HOME_WIDGET_WATCHING_NOW_LIMIT: u32 = 84;
 pub const HOME_WIDGET_NEWEST_DEFAULT_COUNT: u32 = 12;
@@ -24,7 +24,7 @@ pub struct UpdateTagsResponse {
 }
 
 pub fn render_pornstars_widget(cards: &[EntityIndexCard], cdn_base: &str) -> String {
-    cards
+    let html = cards
         .iter()
         .map(|card| {
             render_entity_cat_thumb(
@@ -36,11 +36,12 @@ pub fn render_pornstars_widget(cards: &[EntityIndexCard], cdn_base: &str) -> Str
             )
         })
         .collect::<Vec<_>>()
-        .join(" ")
+        .join(" ");
+    format!(" {html} ")
 }
 
 pub fn render_channels_widget(cards: &[EntityIndexCard], cdn_base: &str) -> String {
-    cards
+    let html = cards
         .iter()
         .map(|card| {
             render_entity_cat_thumb(
@@ -52,7 +53,8 @@ pub fn render_channels_widget(cards: &[EntityIndexCard], cdn_base: &str) -> Stri
             )
         })
         .collect::<Vec<_>>()
-        .join(" ")
+        .join(" ");
+    format!(" {html} ")
 }
 
 pub fn render_watching_now_widget(videos: &[VideoThumb]) -> String {

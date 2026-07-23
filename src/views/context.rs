@@ -471,20 +471,20 @@ mod tests {
     }
 
     #[test]
-    fn home_boot_script_uses_local_static_directory() {
+    fn home_boot_script_uses_live_cdn_directory() {
         let ctx = RenderContext::home_first_page(layout());
         let script = ctx.home_boot_script();
         assert!(script.contains("isTHUMBS_OR_PLAYER = true"));
-        assert!(script.contains("directory = \"/static/fox-tpl\""));
+        assert!(script.contains("directory = \"https://c.foxporn.tv/fox-tpl\""));
         assert!(script.contains("thumbs_path = \"https://c.foxporn.tv/fox-images/videos\""));
     }
 
     #[test]
-    fn listing_boot_script_uses_local_fox_tpl_directory() {
+    fn listing_boot_script_uses_live_cdn_directory() {
         let ctx = RenderContext::categories_index(layout());
         let script = ctx.boot_script();
         assert!(script.contains("isTHUMBS_OR_PLAYER = false"));
-        assert!(script.contains("directory = \"/fox-tpl\""));
+        assert!(script.contains("directory = \"https://c.foxporn.tv/fox-tpl\""));
     }
 
     #[test]
@@ -611,7 +611,10 @@ mod tests {
         )
         .unwrap();
         let view = PornstarsIndexView::build(
-            cards.into_iter().take(48).collect(),
+            cards
+                .into_iter()
+                .take(crate::models::pagination::DEFAULT_ENTITY_INDEX_PER_PAGE as usize)
+                .collect(),
             &meta,
             &crate::models::pagination::SortKey::Entity(
                 crate::models::pagination::EntitySortKey::Trending,
@@ -664,7 +667,10 @@ mod tests {
         )
         .unwrap();
         let view = ChannelsIndexView::build(
-            cards.into_iter().take(48).collect(),
+            cards
+                .into_iter()
+                .take(crate::models::pagination::DEFAULT_ENTITY_INDEX_PER_PAGE as usize)
+                .collect(),
             &meta,
             &crate::models::pagination::SortKey::Entity(
                 crate::models::pagination::EntitySortKey::Trending,

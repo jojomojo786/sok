@@ -11,6 +11,8 @@ use crate::models::taxonomy::{CategoryCard, CatsTagsSearchItem, CatsTagsSearchRe
 use crate::models::video::VideoThumb;
 
 pub const CATALOG_SEED_JSON: &str = include_str!("../../fixtures/catalog_seed.json");
+pub const ENTITY_INDEX_LIVE_SEED_JSON: &str =
+    include_str!("../../fixtures/entity_index_live_seed.json");
 pub const DEV_CATALOG_SQL: &str = include_str!("../../sql/seeds/dev_catalog.sql");
 pub const VIDEOS_SCHEMA_SQL: &str = include_str!("../../sql/schema/videos.sql");
 pub const TAXONOMY_SCHEMA_SQL: &str = include_str!("../../migrations/001_taxonomy.sql");
@@ -72,6 +74,22 @@ pub struct SeedChannel {
     pub week_views: u64,
 }
 
+#[derive(Debug, Clone, Deserialize, PartialEq)]
+pub struct EntityIndexLiveSeed {
+    pub pornstars: Vec<SeedLiveEntityIndexCard>,
+    pub channels: Vec<SeedLiveEntityIndexCard>,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq)]
+pub struct SeedLiveEntityIndexCard {
+    pub id: u64,
+    pub slug: String,
+    pub display_name: String,
+    pub thumb_path: String,
+    pub video_count: u32,
+    pub sort_order: u32,
+}
+
 #[derive(Debug, Clone, Deserialize, PartialEq, Default)]
 pub struct SeedLinks {
     #[serde(default)]
@@ -103,6 +121,36 @@ pub struct SeedVideoChannelLink {
 pub fn load_catalog_seed() -> Result<CatalogSeed, AppError> {
     serde_json::from_str(CATALOG_SEED_JSON)
         .map_err(|e| AppError::Internal(format!("invalid catalog seed JSON: {e}")))
+}
+
+pub fn load_entity_index_live_seed() -> Result<EntityIndexLiveSeed, AppError> {
+    serde_json::from_str(ENTITY_INDEX_LIVE_SEED_JSON)
+        .map_err(|e| AppError::Internal(format!("invalid entity index live seed JSON: {e}")))
+}
+
+fn live_entity_cards(cards: &[SeedLiveEntityIndexCard]) -> Vec<EntityIndexCard> {
+    let mut cards: Vec<SeedLiveEntityIndexCard> = cards.to_vec();
+    cards.sort_by_key(|card| card.sort_order);
+    cards
+        .into_iter()
+        .map(|card| EntityIndexCard {
+            id: card.id,
+            slug: card.slug,
+            display_name: card.display_name,
+            thumb_path: card.thumb_path,
+            video_count: card.video_count,
+        })
+        .collect()
+}
+
+pub fn live_pornstar_index_cards() -> Result<Vec<EntityIndexCard>, AppError> {
+    let seed = load_entity_index_live_seed()?;
+    Ok(live_entity_cards(&seed.pornstars))
+}
+
+pub fn live_channel_index_cards() -> Result<Vec<EntityIndexCard>, AppError> {
+    let seed = load_entity_index_live_seed()?;
+    Ok(live_entity_cards(&seed.channels))
 }
 
 pub fn seed_home_thumbs(seed: &CatalogSeed) -> Vec<VideoThumb> {
@@ -197,6 +245,10 @@ pub fn seed_category_cards(seed: &CatalogSeed) -> Vec<CategoryCard> {
             thumb_url: c.thumb_url.clone(),
             video_count: c.video_count,
             listing_url: format!("/{}", c.slug),
+            link_title: None,
+            alt_text: format!("{} porn videos", c.display_name),
+            lazy: false,
+            uses_tags_icon: false,
         })
         .collect()
 }

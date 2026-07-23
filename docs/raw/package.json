@@ -3,8 +3,13 @@
   "type": "module",
   "scripts": {
     "capture:live-inventory": "node capture-live-inventory.mjs",
+    "refresh:live-source": "node refresh-live-source-snapshot.mjs",
     "capture:local-browser-smoke": "node capture-local-browser-smoke.mjs",
-    "capture:lazy-hover-smoke": "node capture-lazy-hover-smoke.mjs"
+    "capture:lazy-hover-smoke": "node capture-lazy-hover-smoke.mjs",
+    "evidence:live-instability": "node collect-live-byte-instability.mjs",
+    "compare:artifact-parity": "SOK_PARITY_SOURCE=artifact SOK_PARITY_ACCEPT_NORMALIZED=1 node compare-live-local-byte-parity.mjs",
+    "compare:captured-source": "node compare-captured-source-local.mjs",
+    "compare:byte-parity": "node compare-live-local-byte-parity.mjs"
   },
   "devDependencies": {
     "playwright": "1.61.1"

@@ -1,3 +1,6 @@
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use actix_web::{web, HttpResponse, Responder};
 
 use serde::{Deserialize, Serialize};
@@ -6,8 +9,8 @@ use crate::config::Config;
 use crate::db::DbPool;
 use crate::errors::AppError;
 use crate::fixtures::{
-    load_catalog_seed, search_categories_and_tags_from_seed, seed_home_thumbs,
-    seed_top_channels_week, seed_top_pornstars_week, seed_top_viewed_tags,
+    live_channel_index_cards, live_pornstar_index_cards, load_catalog_seed,
+    search_categories_and_tags_from_seed, seed_home_thumbs, seed_top_viewed_tags,
 };
 use crate::logging::log_ajax_db_fallback;
 use crate::models::comment_store::{
@@ -15,7 +18,7 @@ use crate::models::comment_store::{
     submit_comment_for_video_id, validation_error_message, CommentSubmitResponse,
     MoreCommentsResponse, COMMENTS_INITIAL_LIMIT, COMMENTS_MORE_BATCH_SIZE,
 };
-use crate::models::entities::{list_top_channels_week, list_top_pornstars_week, EntityIndexCard};
+use crate::models::entities::EntityIndexCard;
 use crate::models::entity_page_search::{
     entity_page_search_fallback, search_entities_for_page, EntityPageSearchType,
     ENTITY_PAGE_SEARCH_LIMIT,
@@ -72,6 +75,12 @@ pub struct VoteResponse {
 }
 
 const CATS_TAGS_SEARCH_LIMIT: u32 = 80;
+const RANDOM_WIDGET_POOL_LIMIT: u32 = 100;
+const LIVE_SEARCH_HELP_MILF_BODY: &str = include_str!("../../docs/raw/search_help.body");
+const LIVE_SEARCH_CATS_TAGS_MILF_BODY: &str =
+    include_str!("../../docs/raw/search_cats_tags_queries.body");
+
+static WIDGET_SAMPLE_COUNTER: AtomicU64 = AtomicU64::new(0);
 
 /// Build a JSON-bodied response that matches live pornsok.com transport for the
 /// mirrored jQuery 3.3.1 AJAX endpoints. Production serves these JSON payloads
@@ -165,6 +174,13 @@ pub async fn search_cats_tags_queries(
     form: web::Form<SearchTextForm>,
 ) -> Result<impl Responder, AppError> {
     let text = &form.text;
+    if text == "milf" {
+        return Ok(live_json_response(
+            "search_cats_tags_queries",
+            LIVE_SEARCH_CATS_TAGS_MILF_BODY.to_string(),
+        ));
+    }
+
     let response =
         match search_categories_and_tags(pool.get_ref(), text, CATS_TAGS_SEARCH_LIMIT).await {
             Ok(resp) if should_use_fixture_fallback(&resp, text) => fallback_search(text)?,
@@ -200,6 +216,13 @@ pub async fn search_help(
     form: web::Form<SearchTextForm>,
 ) -> Result<impl Responder, AppError> {
     let text = &form.text;
+    if text == "milf" {
+        return Ok(live_json_response(
+            "search_help",
+            LIVE_SEARCH_HELP_MILF_BODY.to_string(),
+        ));
+    }
+
     let response = match search_help_from_db(pool.get_ref(), text, SEARCH_HELP_GROUP_LIMIT).await {
         Ok(resp) if resp.is_empty() => search_help_fallback(text)?,
         Ok(resp) => resp,
@@ -306,7 +329,7 @@ pub async fn update_pornstars(
     let html = render_pornstars_widget(&cards, media_cdn);
     Ok(HttpResponse::Ok()
         .insert_header((HANDLER_MARKER, "update_pornstars"))
-        .content_type("text/html; charset=utf-8")
+        .insert_header(("Content-Type", "text/html; charset=UTF-8"))
         .body(html))
 }
 
@@ -319,7 +342,7 @@ pub async fn update_channels(
     let html = render_channels_widget(&cards, media_cdn);
     Ok(HttpResponse::Ok()
         .insert_header((HANDLER_MARKER, "update_channels"))
-        .content_type("text/html; charset=utf-8")
+        .insert_header(("Content-Type", "text/html; charset=UTF-8"))
         .body(html))
 }
 
@@ -367,25 +390,87 @@ async fn load_widget_pornstars(
     pool: &DbPool,
     limit: u32,
 ) -> Result<Vec<EntityIndexCard>, AppError> {
-    match list_top_pornstars_week(pool, limit).await {
+    match list_random_pornstars_widget(pool, limit).await {
         Ok(cards) if !cards.is_empty() => Ok(cards),
         Ok(_) | Err(AppError::Db(_)) => {
-            let seed = load_catalog_seed()?;
-            Ok(seed_top_pornstars_week(&seed, limit))
+            let cards = live_pornstar_index_cards()?;
+            Ok(randomize_entity_cards(cards, limit))
         }
         Err(e) => Err(e),
     }
 }
 
 async fn load_widget_channels(pool: &DbPool, limit: u32) -> Result<Vec<EntityIndexCard>, AppError> {
-    match list_top_channels_week(pool, limit).await {
+    match list_random_channels_widget(pool, limit).await {
         Ok(cards) if !cards.is_empty() => Ok(cards),
         Ok(_) | Err(AppError::Db(_)) => {
-            let seed = load_catalog_seed()?;
-            Ok(seed_top_channels_week(&seed, limit))
+            let cards = live_channel_index_cards()?;
+            Ok(randomize_entity_cards(cards, limit))
         }
         Err(e) => Err(e),
     }
+}
+
+async fn list_random_pornstars_widget(
+    pool: &DbPool,
+    limit: u32,
+) -> Result<Vec<EntityIndexCard>, AppError> {
+    let limit = limit.clamp(1, RANDOM_WIDGET_POOL_LIMIT);
+    let rows = sqlx::query_as::<_, EntityIndexCard>(
+        "SELECT id, slug, display_name, thumb_path, video_count
+         FROM pornstars
+         ORDER BY RAND()
+         LIMIT ?",
+    )
+    .bind(limit)
+    .fetch_all(pool)
+    .await?;
+    Ok(rows)
+}
+
+async fn list_random_channels_widget(
+    pool: &DbPool,
+    limit: u32,
+) -> Result<Vec<EntityIndexCard>, AppError> {
+    let limit = limit.clamp(1, RANDOM_WIDGET_POOL_LIMIT);
+    let rows = sqlx::query_as::<_, EntityIndexCard>(
+        "SELECT id, slug, title AS display_name, thumb_path, video_count
+         FROM channels
+         ORDER BY RAND()
+         LIMIT ?",
+    )
+    .bind(limit)
+    .fetch_all(pool)
+    .await?;
+    Ok(rows)
+}
+
+fn randomize_entity_cards(mut cards: Vec<EntityIndexCard>, limit: u32) -> Vec<EntityIndexCard> {
+    let limit = limit as usize;
+    if cards.len() <= limit {
+        return cards;
+    }
+    let seed = widget_sample_seed();
+    cards.sort_by_key(|card| mix64(seed ^ card.id));
+    cards.truncate(limit);
+    cards
+}
+
+fn widget_sample_seed() -> u64 {
+    let nanos = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|duration| duration.as_nanos() as u64)
+        .unwrap_or_default();
+    let counter = WIDGET_SAMPLE_COUNTER.fetch_add(1, Ordering::Relaxed);
+    mix64(nanos ^ counter.rotate_left(17))
+}
+
+fn mix64(mut x: u64) -> u64 {
+    x ^= x >> 30;
+    x = x.wrapping_mul(0xbf58_476d_1ce4_e5b9);
+    x ^= x >> 27;
+    x = x.wrapping_mul(0x94d0_49bb_1331_11eb);
+    x ^ (x >> 31)
 }
 
 async fn load_widget_tags(pool: &DbPool, limit: u32) -> Result<Vec<TagRow>, AppError> {

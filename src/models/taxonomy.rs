@@ -122,6 +122,10 @@ pub struct CategoryCard {
     pub thumb_url: String,
     pub video_count: u32,
     pub listing_url: String,
+    pub link_title: Option<String>,
+    pub alt_text: String,
+    pub lazy: bool,
+    pub uses_tags_icon: bool,
 }
 
 /// JSON row for POST `/ajax/search_cats_tags_queries`.
@@ -170,6 +174,10 @@ impl CategoryRow {
             thumb_url: self.effective_thumb_url(),
             video_count: self.video_count,
             listing_url,
+            link_title: None,
+            alt_text: format!("{} porn videos", self.display_name),
+            lazy: false,
+            uses_tags_icon: false,
         }
     }
 

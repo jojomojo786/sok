@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-06-26T21:16:26.293Z",
+  "live_base_url": "https://pornsok.com",
+  "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 SOKSourceCapture/1.0",
+  "routes": [
+    {
+      "label": "home",
+      "route": "/",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "home.html",
+      "byte_length": 207287
+    },
+    {
+      "label": "categories",
+      "route": "/categories",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "categories.html",
+      "byte_length": 170811
+    },
+    {
+      "label": "pornstars",
+      "route": "/pornstars",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "pornstars.html",
+      "byte_length": 126224
+    },
+    {
+      "label": "channels",
+      "route": "/channels",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "channels.html",
+      "byte_length": 125499
+    },
+    {
+      "label": "privacy",
+      "route": "/page/privacy.html",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "privacy.html",
+      "byte_length": 112052
+    }
+  ]
+}

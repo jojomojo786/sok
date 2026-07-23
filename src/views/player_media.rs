@@ -54,6 +54,8 @@ pub struct PlayerBootGlobals {
     pub is_mobile: bool,
     pub videourl: String,
     pub id_video: u64,
+    pub include_video_fields: bool,
+    pub include_listing_preloads: bool,
 }
 
 impl PlayerBootGlobals {
@@ -73,6 +75,8 @@ impl PlayerBootGlobals {
             is_mobile: false,
             videourl: String::new(),
             id_video: 0,
+            include_video_fields: true,
+            include_listing_preloads: false,
         }
     }
 
@@ -97,20 +101,35 @@ impl PlayerBootGlobals {
             is_mobile: false,
             videourl: String::new(),
             id_video: 0,
+            include_video_fields: false,
+            include_listing_preloads: false,
         }
     }
 
     pub fn listing_page(assets: &AssetPaths, thumbs_cdn_base: &str) -> Self {
-        Self::base_listing(false, assets.fox_tpl_directory(), assets, thumbs_cdn_base)
+        let mut boot = Self::base_listing(
+            false,
+            media_url(thumbs_cdn_base, "fox-tpl"),
+            assets,
+            thumbs_cdn_base,
+        );
+        boot.first_load = true;
+        boot.screen_mode = 'd';
+        boot.include_listing_preloads = true;
+        boot
     }
 
     pub fn home_listing_page(assets: &AssetPaths, thumbs_cdn_base: &str) -> Self {
-        Self::base_listing(
+        let mut boot = Self::base_listing(
             true,
-            assets.static_fox_tpl_directory(),
+            media_url(thumbs_cdn_base, "fox-tpl"),
             assets,
             thumbs_cdn_base,
-        )
+        );
+        boot.first_load = true;
+        boot.screen_mode = 'd';
+        boot.include_listing_preloads = true;
+        boot
     }
 
     pub fn video_page_for_media(
@@ -125,8 +144,8 @@ impl PlayerBootGlobals {
     }
 
     pub fn to_inline_script(&self) -> String {
-        format!(
-            "var isTHUMBS_OR_PLAYER = {}, isPLAYER = {}, lazyThreshold = {}, directory = \"{}\", thumbs_path = \"{}\", thumbs_dir = \"{}\", video_path = \"{}\", seb = {}, first_load = {}, pjs_v = {}, screen_mode = '{}', is_mobile = {}, videourl = \"{}\", id_video = {};",
+        let mut script = format!(
+            " var isTHUMBS_OR_PLAYER = {}, isPLAYER = {}, lazyThreshold = {}, directory = \"{}\", thumbs_path = \"{}\", thumbs_dir = \"{}\", video_path = \"{}\", seb = {}, first_load = {}, pjs_v = {}, screen_mode = '{}', is_mobile = {}",
             js_bool(self.is_thumbs_or_player),
             js_bool(self.is_player),
             self.lazy_threshold,
@@ -139,9 +158,20 @@ impl PlayerBootGlobals {
             self.pjs_v,
             self.screen_mode,
             js_bool(self.is_mobile),
-            escape_js_string(&self.videourl),
-            self.id_video,
-        )
+        );
+        if self.include_video_fields {
+            script.push_str(&format!(
+                ", videourl = \"{}\", id_video = {}",
+                escape_js_string(&self.videourl),
+                self.id_video,
+            ));
+        }
+        script.push(';');
+        if self.include_listing_preloads {
+            script.push_str(" preloads.push({'array': ['https://c.foxporn.tv/fox-tpl/js/playerjs.js?v=17'], 'cookie': 'prel_pjs', 'cookie_days': 365, 'on_scroll': true, 'data_type': 'js'}); preloads.push({'array': ['https://c.foxporn.tv/fox-tpl/images/loadMoreVideos.gif'], 'cookie': 'prel_loadmore', 'cookie_days': 365, 'on_scroll': true, 'delay': 2});");
+        }
+        script.push(' ');
+        script
     }
 }
 

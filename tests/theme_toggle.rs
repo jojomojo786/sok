@@ -45,20 +45,7 @@ fn main_min_js_contract() -> String {
     panic!("main.min.js not found under static/js or static/fox-tpl/js");
 }
 
-fn assert_theme_page_markup(html: &str, path: &str) {
-    assert!(
-        html.contains("<html lang=\"en\"") && html.contains("data-theme=\"dark\""),
-        "{path}: missing default dark theme on <html>"
-    );
-    assert!(
-        html.contains("id=\"day-night\" title=\"Day mode\""),
-        "{path}: missing day-night control with Day mode title"
-    );
-    assert!(
-        html.contains("id=\"day-night-icon\" class=\"to-day\"")
-            && html.contains("<use xlink:href=\"#sun-svg\" />"),
-        "{path}: missing default sun icon state"
-    );
+fn assert_theme_page_contract(html: &str, path: &str) {
     assert!(
         html.contains("id=\"sun-svg\"") && html.contains("id=\"moon-svg\""),
         "{path}: missing inline sun/moon SVG symbol defs"
@@ -84,6 +71,44 @@ fn assert_theme_page_markup(html: &str, path: &str) {
     assert!(
         html.contains("#day-night{ position: absolute; right: 80px; }"),
         "{path}: missing mobile day-night positioning"
+    );
+}
+
+fn assert_live_listing_theme_state(html: &str, path: &str) {
+    assert_theme_page_contract(html, path);
+    assert!(
+        html.contains("<html lang=\"en\" prefix=\"og: http://ogp.me/ns#\" >"),
+        "{path}: listing shell should start in the live day theme"
+    );
+    assert!(
+        html.contains("id=\"day-night\" title=\"Night mode\""),
+        "{path}: missing live day-night control title"
+    );
+    assert!(
+        html.contains("id=\"day-night-icon\" class=\"to-night\"")
+            && html.contains("<use xlink:href=\"#moon-svg\" />"),
+        "{path}: missing live moon icon state"
+    );
+    assert!(
+        html.contains("screen_mode = 'd'"),
+        "{path}: missing live listing boot global screen_mode = 'd'"
+    );
+}
+
+fn assert_default_dark_theme_state(html: &str, path: &str) {
+    assert_theme_page_contract(html, path);
+    assert!(
+        html.contains("<html lang=\"en\"") && html.contains("data-theme=\"dark\""),
+        "{path}: missing default dark theme on <html>"
+    );
+    assert!(
+        html.contains("id=\"day-night\" title=\"Day mode\""),
+        "{path}: missing day-night control with Day mode title"
+    );
+    assert!(
+        html.contains("id=\"day-night-icon\" class=\"to-day\"")
+            && html.contains("<use xlink:href=\"#sun-svg\" />"),
+        "{path}: missing default sun icon state"
     );
     assert!(
         html.contains("screen_mode = 'n'"),
@@ -141,10 +166,10 @@ fn assert_main_min_js_theme_contract(js: &str) {
 #[actix_web::test]
 async fn home_page_includes_theme_toggle_markup_and_boot_state() {
     let html = fetch_html("/").await;
-    assert_theme_page_markup(&html, "/");
+    assert_live_listing_theme_state(&html, "/");
     assert!(
-        html.contains("src=\"/static/js/main.min.js\""),
-        "home should load /static/js/main.min.js"
+        html.contains("src=\"/fox-tpl/js/main.min.js?v=11\""),
+        "home should mirror the live main.min.js path"
     );
 
     let js = main_min_js_contract();
@@ -156,7 +181,7 @@ async fn home_page_includes_theme_toggle_markup_and_boot_state() {
 #[actix_web::test]
 async fn categories_page_includes_theme_toggle_markup_and_boot_state() {
     let html = fetch_html("/categories").await;
-    assert_theme_page_markup(&html, "/categories");
+    assert_live_listing_theme_state(&html, "/categories");
     assert!(
         html.contains("main.min.js"),
         "categories should reference main.min.js"
@@ -166,14 +191,14 @@ async fn categories_page_includes_theme_toggle_markup_and_boot_state() {
 #[actix_web::test]
 async fn pornstars_page_includes_theme_toggle_markup_and_boot_state() {
     let html = fetch_html("/pornstars").await;
-    assert_theme_page_markup(&html, "/pornstars");
+    assert_live_listing_theme_state(&html, "/pornstars");
 }
 
 #[actix_web::test]
 async fn sample_video_page_includes_theme_toggle_markup_and_boot_state() {
     let path = format!("/video/{DOG_HOUSE_SLUG}.html");
     let html = fetch_html(&path).await;
-    assert_theme_page_markup(&html, &path);
+    assert_default_dark_theme_state(&html, &path);
     assert!(
         html.contains("isPLAYER = true"),
         "video page boot script should set isPLAYER"

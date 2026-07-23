@@ -59,6 +59,34 @@ async fn post_search_cats_tags_returns_json_with_handler_marker() {
 }
 
 #[actix_web::test]
+async fn post_search_cats_tags_milf_matches_live_sample_body() {
+    dotenv::dotenv().ok();
+    let cfg = Config::load().expect("config");
+    let pool = db::create_pool(&cfg).await;
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(pool))
+            .app_data(web::Data::new(cfg))
+            .configure(configure_static)
+            .configure(handlers::routes),
+    )
+    .await;
+    let req = test::TestRequest::post()
+        .uri("/ajax/search_cats_tags_queries")
+        .insert_header(("Content-Type", "application/x-www-form-urlencoded"))
+        .set_payload("text=milf")
+        .to_request();
+
+    let resp = test::call_service(&app, req).await;
+    assert_eq!(resp.status(), StatusCode::OK);
+    let body = test::read_body(resp).await;
+    assert_eq!(
+        body.as_ref(),
+        include_bytes!("../docs/raw/search_cats_tags_queries.body")
+    );
+}
+
+#[actix_web::test]
 async fn post_search_cats_tags_echoes_search_text_and_item_shape() {
     dotenv::dotenv().ok();
     let cfg = Config::load().expect("config");

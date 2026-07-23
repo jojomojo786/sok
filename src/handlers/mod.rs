@@ -5,6 +5,7 @@ mod health;
 mod home;
 mod legal;
 mod listings;
+mod replay;
 mod search;
 mod video;
 
@@ -16,6 +17,18 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     cfg
         // Fixed paths (must register before `/{slug}` fallback)
         .route("/", web::get().to(home::index))
+        .route(
+            "/_diag/source-replay/{label}",
+            web::get().to(replay::source_replay),
+        )
+        .route(
+            "/_diag/source-replay/page/{name}.html",
+            web::get().to(replay::source_replay_page),
+        )
+        .route(
+            "/_diag/source-replay/ajax/{name}",
+            web::get().to(replay::source_replay_ajax),
+        )
         .route("/categories", web::get().to(listings::categories))
         .route("/health", web::get().to(health::health_check))
         .route("/pornstars", web::get().to(listings::pornstars_list))

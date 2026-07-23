@@ -1,0 +1,342 @@
+{
+  "generated_at": "2026-06-26T19:16:31.790Z",
+  "tool": "compare-live-local-byte-parity.mjs",
+  "local_base_url": "http://127.0.0.1:19091",
+  "live_base_url": "https://pornsok.com",
+  "config": {
+    "search_term": "milf",
+    "skip_search": true,
+    "report_only": true,
+    "timeout_ms": 30000,
+    "extra_routes": []
+  },
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "failed": 7,
+    "report_only": true
+  },
+  "probes": [
+    {
+      "kind": "GET",
+      "label": "home",
+      "path": "/",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 111757,
+        "sha256": "e56dd45a959321cb357b1fe3e1f175e3a164f69abee620cba28b3747a0c8aa84",
+        "normalized_byte_length": 111734,
+        "normalized_sha256": "ce70829daff45b8f6ae77bc3094702546f2ae94fb1768763d1e505361d73fd9a",
+        "final_url": "http://127.0.0.1:19091/",
+        "redirected": false,
+        "title": "Free Porn Videos & Hot 🌶️ Sex Movies | PornsOK.com",
+        "h1": [
+          "Top Trending Free Porn Videos"
+        ],
+        "canonical": "https://pornsok.com/",
+        "thumb_vid_count": 14,
+        "thumb_cat_count": 0,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 206280,
+        "sha256": "eb2f8ad2001fa58d3f5aa49981152b7c8abbec1aa837010f6b2ff9270d8ec209",
+        "normalized_byte_length": 205768,
+        "normalized_sha256": "7762d50731856127d1f952fe5dbefc6b5c212905dc3c491dbf86f58522cfe782",
+        "final_url": "https://pornsok.com/",
+        "redirected": false,
+        "title": "Free Porn Videos & Hot 🌶️ Sex Movies | PornsOK.com",
+        "h1": [
+          "Top Trending Free Porn Videos"
+        ],
+        "canonical": "https://pornsok.com/",
+        "thumb_vid_count": 54,
+        "thumb_cat_count": 12,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": false,
+      "normalized_hash_match": false,
+      "normalized_parity": false,
+      "exact_parity": false
+    },
+    {
+      "kind": "GET",
+      "label": "categories",
+      "path": "/categories",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 98663,
+        "sha256": "fa7ceb1095660aeac841de0f3a294caa89e7c7fafea063b7ebe2de4e9698c80b",
+        "normalized_byte_length": 98640,
+        "normalized_sha256": "abcbfe9093d1f5f225bd15eff0da48fde1ed0602a48c38f99c8683c498e1079e",
+        "final_url": "http://127.0.0.1:19091/categories",
+        "redirected": false,
+        "title": "Porn Categories: Hottest Sex Niches | PornsOK.com",
+        "h1": [
+          "Porn Video Categories"
+        ],
+        "canonical": "https://pornsok.com/categories",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 28,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 170811,
+        "sha256": "1289bc38483d4155e7bc2e86c54a93574fc92a411a208d049037b2f8b5f4d970",
+        "normalized_byte_length": 170115,
+        "normalized_sha256": "cc64c2d313d989d9c48f7736b637198d6700b0986feb5b0a985de3c3540a3f60",
+        "final_url": "https://pornsok.com/categories",
+        "redirected": false,
+        "title": "Porn Categories: Hottest Sex Niches | PornsOK.com",
+        "h1": [
+          "Porn Video Categories"
+        ],
+        "canonical": "https://pornsok.com/categories",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 120,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": false,
+      "normalized_hash_match": false,
+      "normalized_parity": false,
+      "exact_parity": false
+    },
+    {
+      "kind": "GET",
+      "label": "pornstars",
+      "path": "/pornstars",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 126140,
+        "sha256": "1f7b4b17d4f8d0330d0b0e0a8de1b1506583cf4384cd001c7e86deee32df5109",
+        "normalized_byte_length": 126117,
+        "normalized_sha256": "d6f0db9e7df808a8466be690630c66f2f0fd28539b7f0e544e66a5f309d3cb79",
+        "final_url": "http://127.0.0.1:19091/pornstars",
+        "redirected": false,
+        "title": "Best Pornstars and Models in Free Porn Videos | PornsOK.com",
+        "h1": [
+          "Top Trending Pornstars"
+        ],
+        "canonical": "https://pornsok.com/pornstars",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 126224,
+        "sha256": "a7798c0c10f6d80e27ce52440ae74a94c520fb3d81c2004fcf122c6d84246a0d",
+        "normalized_byte_length": 126195,
+        "normalized_sha256": "7ad44993df4721e35f0c41a34182a030455ac240427fc92b40512e10e298ba2c",
+        "final_url": "https://pornsok.com/pornstars",
+        "redirected": false,
+        "title": "Best Pornstars and Models in Free Porn Videos | PornsOK.com",
+        "h1": [
+          "Top Trending Pornstars"
+        ],
+        "canonical": "https://pornsok.com/pornstars",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": false,
+      "normalized_hash_match": false,
+      "normalized_parity": false,
+      "exact_parity": false
+    },
+    {
+      "kind": "GET",
+      "label": "channels",
+      "path": "/channels",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 125415,
+        "sha256": "49dc465b53bf3d34ebff0615dac7261fb04079c0f59d9d676989a200441edb72",
+        "normalized_byte_length": 125392,
+        "normalized_sha256": "20a936844468d0b2fe2ae7d1150780405df80a45815f3d3ba5343b4961cd9857",
+        "final_url": "http://127.0.0.1:19091/channels",
+        "redirected": false,
+        "title": "Free Porn Channels: List of Best Sex Channels | PornsOK.com",
+        "h1": [
+          "Top Trending Porn Channels"
+        ],
+        "canonical": "https://pornsok.com/channels",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 125499,
+        "sha256": "33708079eca1b4f32ff4a3dfb5765a0ef75bcfb39498670ed79b4340be4b7d28",
+        "normalized_byte_length": 125470,
+        "normalized_sha256": "bb47895cff76451ed4e0735c98d358a16fe7251a372841147fbd9b2295491874",
+        "final_url": "https://pornsok.com/channels",
+        "redirected": false,
+        "title": "Free Porn Channels: List of Best Sex Channels | PornsOK.com",
+        "h1": [
+          "Top Trending Porn Channels"
+        ],
+        "canonical": "https://pornsok.com/channels",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": false,
+      "normalized_hash_match": false,
+      "normalized_parity": false,
+      "exact_parity": false
+    },
+    {
+      "kind": "GET",
+      "label": "privacy",
+      "path": "/page/privacy.html",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 112620,
+        "sha256": "1782403619b80c7b0cade6b0f193fd67d6d591dde58e4250355cafa491ba2232",
+        "normalized_byte_length": 112597,
+        "normalized_sha256": "e7d6801972ce6480363cc7c03890d69b2fa5fcc19e3022412e41d5fb1a51ad32",
+        "final_url": "http://127.0.0.1:19091/page/privacy.html",
+        "redirected": false,
+        "title": "Privacy Policy - Pornsok.com",
+        "h1": [
+          "Privacy Policy - PornsOK.COM"
+        ],
+        "canonical": "https://pornsok.com/page/privacy.html",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 0,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 112052,
+        "sha256": "d688a24fbfbadcf49448721697dd087c75156a4fe35dd602dcbcb3aecf548f90",
+        "normalized_byte_length": 112017,
+        "normalized_sha256": "ba31f90f5a994c2fde660a1c2d1f6e5c7b705ab8a187ada3764414462a4489fd",
+        "final_url": "https://pornsok.com/page/privacy.html",
+        "redirected": false,
+        "title": "Privacy Policy - Pornsok.com",
+        "h1": [
+          "Privacy Policy - PornsOK.COM"
+        ],
+        "canonical": "https://pornsok.com/page/privacy.html",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 0,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": false,
+      "normalized_hash_match": false,
+      "normalized_parity": false,
+      "exact_parity": false
+    },
+    {
+      "kind": "POST",
+      "label": "update_pornstars",
+      "path": "/ajax/update_pornstars",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 5977,
+        "sha256": "7860403496f358da0b521412e7aeb4f219785499f5dd430aec8df16248ade774",
+        "normalized_byte_length": 5977,
+        "normalized_sha256": "7860403496f358da0b521412e7aeb4f219785499f5dd430aec8df16248ade774",
+        "final_url": "http://127.0.0.1:19091/ajax/update_pornstars",
+        "redirected": false,
+        "title": null,
+        "h1": [],
+        "canonical": null,
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 13,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 2700,
+        "sha256": "b876fc8f7a44665b843c2e2f239146a596c2c92e9a5b1fae7c55c8dd08593fed",
+        "normalized_byte_length": 2700,
+        "normalized_sha256": "b876fc8f7a44665b843c2e2f239146a596c2c92e9a5b1fae7c55c8dd08593fed",
+        "final_url": "https://pornsok.com/ajax/update_pornstars",
+        "redirected": false,
+        "title": null,
+        "h1": [],
+        "canonical": null,
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 6,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": false,
+      "normalized_hash_match": false,
+      "normalized_parity": false,
+      "exact_parity": false
+    },
+    {
+      "kind": "POST",
+      "label": "update_channels",
+      "path": "/ajax/update_channels",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 3145,
+        "sha256": "5da182cf2ea02ee70657d8b41f23058412f0bec7cafe713e79f45ad4b999bce5",
+        "normalized_byte_length": 3145,
+        "normalized_sha256": "5da182cf2ea02ee70657d8b41f23058412f0bec7cafe713e79f45ad4b999bce5",
+        "final_url": "http://127.0.0.1:19091/ajax/update_channels",
+        "redirected": false,
+        "title": null,
+        "h1": [],
+        "canonical": null,
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 7,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 2709,
+        "sha256": "0baf62b783adfa4de915b1fa210ad42b464c2f1b21590c5602a1241d7bd16274",
+        "normalized_byte_length": 2709,
+        "normalized_sha256": "0baf62b783adfa4de915b1fa210ad42b464c2f1b21590c5602a1241d7bd16274",
+        "final_url": "https://pornsok.com/ajax/update_channels",
+        "redirected": false,
+        "title": null,
+        "h1": [],
+        "canonical": null,
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 6,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": false,
+      "normalized_hash_match": false,
+      "normalized_parity": false,
+      "exact_parity": false
+    }
+  ]
+}

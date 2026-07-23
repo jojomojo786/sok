@@ -1,0 +1,128 @@
+{
+  "generated_at": "2026-06-26T22:36:18.806Z",
+  "live_base_url": "https://pornsok.com",
+  "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 SOKSourceRefresh/1.0",
+  "source_dir": "live-source-2026-06-27",
+  "routes": [
+    {
+      "label": "home",
+      "route": "/",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "home.html",
+      "byte_length": 207057,
+      "sha256": "b620cbd61cf0edbcdbed4d9dea7d092c58101195386c1ad3f846d3316a21ba24",
+      "normalized_byte_length": 206321,
+      "normalized_sha256": "0435e262125078605f39b16a8f1416769dd2ad2d1204b99b7419552a7ee27477",
+      "fetched_at": "2026-06-26T22:36:18.806Z",
+      "final_url": "https://pornsok.com/",
+      "redirected": false,
+      "title": "Free Porn Videos & Hot 🌶️ Sex Movies | PornsOK.com",
+      "canonical": "https://pornsok.com/",
+      "h1": [
+        "Top Trending Free Porn Videos"
+      ],
+      "thumb_vid_count": 54,
+      "thumb_cat_count": 12,
+      "tag_hover_count": 20
+    },
+    {
+      "label": "categories",
+      "route": "/categories",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "categories.html",
+      "byte_length": 170811,
+      "sha256": "dc358c4d70a5a1def447f4f548f2b8de1eeec2bf85489af17248c6cc779021a3",
+      "normalized_byte_length": 169935,
+      "normalized_sha256": "a720c46f743877ba810a345e63bd16babaa8aea24d3027bad1593aa8fe2cc093",
+      "fetched_at": "2026-06-26T22:36:18.806Z",
+      "final_url": "https://pornsok.com/categories",
+      "redirected": false,
+      "title": "Porn Categories: Hottest Sex Niches | PornsOK.com",
+      "canonical": "https://pornsok.com/categories",
+      "h1": [
+        "Porn Video Categories"
+      ],
+      "thumb_vid_count": 0,
+      "thumb_cat_count": 120,
+      "tag_hover_count": 29
+    },
+    {
+      "label": "pornstars",
+      "route": "/pornstars",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "pornstars.html",
+      "byte_length": 126224,
+      "sha256": "65684fed4660fe54f596f1f53e60ecd302c1981460b3a922a55b9791897c16ce",
+      "normalized_byte_length": 125993,
+      "normalized_sha256": "201dab1bb2671f6e05184e4466a7eec3c15cae325ea161882117f285c9c3bfc4",
+      "fetched_at": "2026-06-26T22:36:18.806Z",
+      "final_url": "https://pornsok.com/pornstars",
+      "redirected": false,
+      "title": "Best Pornstars and Models in Free Porn Videos | PornsOK.com",
+      "canonical": "https://pornsok.com/pornstars",
+      "h1": [
+        "Top Trending Pornstars"
+      ],
+      "thumb_vid_count": 0,
+      "thumb_cat_count": 60,
+      "tag_hover_count": 0
+    },
+    {
+      "label": "channels",
+      "route": "/channels",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "channels.html",
+      "byte_length": 125499,
+      "sha256": "949596ed6ed4f2f0823fde7ce0ba379f72d722109c00de548145ab8efb6c9a8a",
+      "normalized_byte_length": 125268,
+      "normalized_sha256": "602ef382807e87a6d89185aa5895dc984f775ea5570504a3d2f238662aa0e4b7",
+      "fetched_at": "2026-06-26T22:36:18.806Z",
+      "final_url": "https://pornsok.com/channels",
+      "redirected": false,
+      "title": "Free Porn Channels: List of Best Sex Channels | PornsOK.com",
+      "canonical": "https://pornsok.com/channels",
+      "h1": [
+        "Top Trending Porn Channels"
+      ],
+      "thumb_vid_count": 0,
+      "thumb_cat_count": 60,
+      "tag_hover_count": 0
+    },
+    {
+      "label": "privacy",
+      "route": "/page/privacy.html",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "file": "privacy.html",
+      "byte_length": 112052,
+      "sha256": "6799eb6c178fd50ed831f04ed0245987e4e19b0107d7e7c129c7bc60d081ff16",
+      "normalized_byte_length": 111485,
+      "normalized_sha256": "db6294875264dbce8947892d9df72c6574ca5eef6527526a2662684aa82c09ab",
+      "fetched_at": "2026-06-26T22:36:18.806Z",
+      "final_url": "https://pornsok.com/page/privacy.html",
+      "redirected": false,
+      "title": "Privacy Policy - Pornsok.com",
+      "canonical": "https://pornsok.com/page/privacy.html",
+      "h1": [
+        "Privacy Policy - PornsOK.COM"
+      ],
+      "thumb_vid_count": 0,
+      "thumb_cat_count": 0,
+      "tag_hover_count": 0
+    }
+  ],
+  "refreshed_inventory": {
+    "home": {
+      "path": "/Users/adeel/Downloads/sok/docs/raw/live-inventory-2026-06-26/home__desktop.json",
+      "sourceBytes": 207057,
+      "mainBytes": 121404,
+      "thumbVidCount": 54,
+      "thumbCatCount": 12,
+      "tagHoverCount": 20
+    }
+  }
+}

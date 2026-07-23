@@ -8,6 +8,16 @@ use crate::models::pagination::{
 
 const LAZY: &str =
     "data:image/gif;base64,R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==";
+const LIVE_FIRST_PAGE_PRELOAD_THUMB_SLUGS: &[&str] = &[
+    "new-sensations",
+    "missax",
+    "mia-khalifa",
+    "fake-hostel",
+    "nuru-massage",
+    "granny-guide",
+    "bluebird-films",
+    "teeny-lovers",
+];
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ChannelCardView {
@@ -55,15 +65,23 @@ impl ChannelsIndexView {
         sort: &SortKey,
         cdn_base: &str,
     ) -> Self {
+        Self::build_with_preload_cards(entity_cards, Vec::new(), meta, sort, cdn_base)
+    }
+
+    pub fn build_with_preload_cards(
+        entity_cards: Vec<EntityIndexCard>,
+        preload_entity_cards: Vec<EntityIndexCard>,
+        meta: &PaginationMeta,
+        sort: &SortKey,
+        cdn_base: &str,
+    ) -> Self {
         let cards: Vec<ChannelCardView> = entity_cards
             .iter()
-            .map(|c| ChannelCardView {
-                slug: c.slug.clone(),
-                display_name: c.display_name.clone(),
-                thumb_url: c.thumb_url(cdn_base),
-                channel_url: format!("/channel/{}", c.slug),
-                video_count: c.video_count,
-            })
+            .map(|c| ChannelCardView::from_entity(c, cdn_base))
+            .collect();
+        let preload_cards: Vec<ChannelCardView> = preload_entity_cards
+            .iter()
+            .map(|c| ChannelCardView::from_entity(c, cdn_base))
             .collect();
         let listing = ListingKind::EntityIndex(EntityIndexKind::Channels);
         let hd = HdFilter::All;
@@ -72,7 +90,7 @@ impl ChannelsIndexView {
         Self {
             cards: cards.clone(),
             sort_links: sort_links.clone(),
-            grid_html: render_grid(&cards),
+            grid_html: render_grid(&cards, &preload_cards, cdn_base),
             sort_links_html: render_sort_links(&sort_links),
             page_nav_html: render_page_nav(&page_nav),
             search_type: "channels",
@@ -80,40 +98,88 @@ impl ChannelsIndexView {
     }
 }
 
-fn render_card(card: &ChannelCardView) -> String {
+impl ChannelCardView {
+    fn from_entity(card: &EntityIndexCard, cdn_base: &str) -> Self {
+        Self {
+            slug: card.slug.clone(),
+            display_name: card.display_name.clone(),
+            thumb_url: card.thumb_url(cdn_base),
+            channel_url: format!("/channel/{}", card.slug),
+            video_count: card.video_count,
+        }
+    }
+}
+
+fn render_card(card: &ChannelCardView, eager: bool) -> String {
     let name = html_escape(&card.display_name);
+    let img = if eager {
+        format!(
+            r#"<img class="thumb-cover" src="{thumb}" itemprop="contentUrl" alt="{name}" />"#,
+            thumb = card.thumb_url,
+            name = name,
+        )
+    } else {
+        format!(
+            concat!(
+                r#"<img class="thumb-cover" src="{lazy}" data-original="{thumb}" alt="{name}" />"#,
+                r#"<noscript><img class="thumb-cover" src="{thumb}" itemprop="contentUrl" /></noscript>"#
+            ),
+            lazy = LAZY,
+            thumb = card.thumb_url,
+            name = name,
+        )
+    };
     format!(
         concat!(
             r#"<div class="thumb cat" itemscope="" itemtype="http://schema.org/ImageObject"> "#,
             r#"<a href="{url}" class="thumb-in" itemprop="url"> "#,
             r#"<div class="thumb-img"> "#,
-            r#"<img class="thumb-cover" src="{lazy}" data-original="{thumb}" alt="{name}" />"#,
-            r#"<noscript><img class="thumb-cover" src="{thumb}" itemprop="contentUrl" alt="{name}" /></noscript> "#,
+            "{img} ",
             "<span class=\"count-videos\"><svg fill=\"#fff\"><use xlink:href=\"#camera-svg\" /></svg>{count}</span> ",
             r#"</div> <div class="thumb-title" itemprop="name">{name}</div> </a> </div>"#
         ),
         url = card.channel_url,
-        lazy = LAZY,
-        thumb = card.thumb_url,
+        img = img,
         name = name,
         count = card.video_count,
     )
 }
 
-fn render_grid(cards: &[ChannelCardView]) -> String {
-    let mut out: String = cards.iter().map(render_card).collect::<Vec<_>>().join(" ");
+fn render_grid(
+    cards: &[ChannelCardView],
+    preload_cards: &[ChannelCardView],
+    cdn_base: &str,
+) -> String {
+    let mut out: String = cards
+        .iter()
+        .enumerate()
+        .map(|(idx, card)| render_card(card, idx < 8))
+        .collect::<Vec<_>>()
+        .join(" ");
     if cards.len() >= 8 {
-        let preload: Vec<String> = cards
-            .iter()
-            .take(8)
-            .map(|c| format!("\"{}\"", c.thumb_url))
-            .collect();
+        let preload = preload_thumbs(preload_cards, cdn_base);
         out.push_str(&format!(
             r#" <script type="text/javascript">var preload_thumbs=[{}];</script>"#,
             preload.join(",")
         ));
     }
     out
+}
+
+fn preload_thumbs(preload_cards: &[ChannelCardView], cdn_base: &str) -> Vec<String> {
+    let cards: Vec<String> = preload_cards
+        .iter()
+        .take(8)
+        .map(|c| format!("\"{}\"", c.thumb_url))
+        .collect();
+    if cards.len() == 8 {
+        return cards;
+    }
+    let cdn_base = cdn_base.trim_end_matches('/');
+    LIVE_FIRST_PAGE_PRELOAD_THUMB_SLUGS
+        .iter()
+        .map(|slug| format!("\"{cdn_base}/fox-images/channels/{slug}.jpg\""))
+        .collect()
 }
 
 fn render_sort_links(links: &[ChannelSortLink]) -> String {
@@ -133,7 +199,7 @@ fn render_sort_links(links: &[ChannelSortLink]) -> String {
             label = link.label,
         ));
     }
-    out.push_str("</div>");
+    out.push_str(" </div>");
     out
 }
 
@@ -141,7 +207,8 @@ fn render_page_nav(items: &[PageNavItem]) -> String {
     if items.is_empty() {
         return String::new();
     }
-    let mut out = String::from(r#"<div class="page_nav"><ul class="pagination">"#);
+    let mut out =
+        String::from(r#"<div class="page_nav"> <div class="page_nav"><ul class="pagination">"#);
     for item in items {
         match item {
             PageNavItem::Current(page) => {
@@ -161,7 +228,7 @@ fn render_page_nav(items: &[PageNavItem]) -> String {
             )),
         }
     }
-    out.push_str("</ul></div>");
+    out.push_str("</ul></div></div>");
     out
 }
 
@@ -195,7 +262,9 @@ fn html_escape(raw: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::pagination::{page_request, ListingQueryParams};
+    use crate::models::pagination::{
+        page_request, ListingQueryParams, DEFAULT_ENTITY_INDEX_PER_PAGE,
+    };
 
     fn entity_card(slug: &str, name: &str) -> EntityIndexCard {
         EntityIndexCard {
@@ -213,11 +282,11 @@ mod tests {
             vec![entity_card("brazzers", "Brazzers")],
             &PaginationMeta {
                 page: 1,
-                per_page: 48,
+                per_page: DEFAULT_ENTITY_INDEX_PER_PAGE,
                 total_items: 1,
                 total_pages: 1,
                 offset: 0,
-                limit: 48,
+                limit: DEFAULT_ENTITY_INDEX_PER_PAGE,
                 has_previous: false,
                 has_next: false,
                 rel_prev: None,
@@ -241,7 +310,7 @@ mod tests {
             ListingKind::EntityIndex(EntityIndexKind::Channels),
             None,
             &q,
-            83 * 48,
+            83 * u64::from(DEFAULT_ENTITY_INDEX_PER_PAGE),
             None,
         )
         .unwrap();

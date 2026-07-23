@@ -62,13 +62,13 @@ fn assert_home_lazy_markup(html: &str) {
     );
     assert!(
         html.contains("isTHUMBS_OR_PLAYER = true")
-            && html.contains("directory = \"/static/fox-tpl\"")
+            && html.contains("directory = \"https://c.foxporn.tv/fox-tpl\"")
             && html.contains("lazyThreshold = 2000"),
         "home boot globals should enable thumb preview behavior"
     );
     assert!(
-        html.contains("src=\"/static/js/main.min.js\""),
-        "home should load the local main.min.js bundle"
+        html.contains("src=\"/fox-tpl/js/main.min.js?v=11\""),
+        "home should mirror the live main.min.js bundle path"
     );
 }
 

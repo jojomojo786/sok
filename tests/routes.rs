@@ -71,6 +71,17 @@ async fn route_maps_categories() {
 }
 
 #[actix_web::test]
+async fn diagnostic_source_replay_is_disabled_by_default() {
+    if std::env::var("SOK_DIAG_ROUTES").is_ok() {
+        return;
+    }
+
+    let (status, _html, handler) = get_html("/_diag/source-replay/home").await;
+    assert_eq!(status, 404);
+    assert_eq!(handler.as_deref(), Some("diag_source_replay"));
+}
+
+#[actix_web::test]
 async fn route_maps_pornstars() {
     assert_eq!(
         get_handler("/pornstars").await.as_deref(),

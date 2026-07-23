@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-06-26T22:36:18.806Z",
+  "tool": "refresh-live-source-snapshot.mjs",
+  "live_base_url": "https://pornsok.com",
+  "previous_source_dir": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-27",
+  "target_source_dir": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-27",
+  "report_only": false,
+  "accept_content_drift": true,
+  "summary": {
+    "total": 5,
+    "content_drift": 1,
+    "status_counts": {
+      "content_drift": 1,
+      "cloudflare_dynamic_only": 4
+    }
+  },
+  "routes": [
+    {
+      "label": "home",
+      "route": "/",
+      "status": "content_drift",
+      "previous_sha256": "f16deb43aabf240a9cc5039857d5b254f23f59b30e8123891616fcb97c078ce5",
+      "current_sha256": "b620cbd61cf0edbcdbed4d9dea7d092c58101195386c1ad3f846d3316a21ba24",
+      "previous_normalized_sha256": "30ea9efe3edb5ab65f8b89548c2d694f738e5baeb54915aa9d3311f04edb17da",
+      "current_normalized_sha256": "0435e262125078605f39b16a8f1416769dd2ad2d1204b99b7419552a7ee27477"
+    },
+    {
+      "label": "categories",
+      "route": "/categories",
+      "status": "cloudflare_dynamic_only",
+      "previous_sha256": "78b1700aef631a65b28bbb4e77319caf44708e5cabd5f049c41fa9c663f0a63c",
+      "current_sha256": "dc358c4d70a5a1def447f4f548f2b8de1eeec2bf85489af17248c6cc779021a3",
+      "previous_normalized_sha256": "a720c46f743877ba810a345e63bd16babaa8aea24d3027bad1593aa8fe2cc093",
+      "current_normalized_sha256": "a720c46f743877ba810a345e63bd16babaa8aea24d3027bad1593aa8fe2cc093"
+    },
+    {
+      "label": "pornstars",
+      "route": "/pornstars",
+      "status": "cloudflare_dynamic_only",
+      "previous_sha256": "8d48e6ff1e8c5a882a9ff4ea34c49ab7f01feb5ad6078183dc3ac5ba6427981e",
+      "current_sha256": "65684fed4660fe54f596f1f53e60ecd302c1981460b3a922a55b9791897c16ce",
+      "previous_normalized_sha256": "201dab1bb2671f6e05184e4466a7eec3c15cae325ea161882117f285c9c3bfc4",
+      "current_normalized_sha256": "201dab1bb2671f6e05184e4466a7eec3c15cae325ea161882117f285c9c3bfc4"
+    },
+    {
+      "label": "channels",
+      "route": "/channels",
+      "status": "cloudflare_dynamic_only",
+      "previous_sha256": "3a9ee7f6c1c03c2ef2a21dfd016e98f59e14d2610aea25d596a6f9fe5a25f26e",
+      "current_sha256": "949596ed6ed4f2f0823fde7ce0ba379f72d722109c00de548145ab8efb6c9a8a",
+      "previous_normalized_sha256": "602ef382807e87a6d89185aa5895dc984f775ea5570504a3d2f238662aa0e4b7",
+      "current_normalized_sha256": "602ef382807e87a6d89185aa5895dc984f775ea5570504a3d2f238662aa0e4b7"
+    },
+    {
+      "label": "privacy",
+      "route": "/page/privacy.html",
+      "status": "cloudflare_dynamic_only",
+      "previous_sha256": "001eb4ab2a73f8040f038ae6cc667dc065e7244395724315970ff4e989ee0b63",
+      "current_sha256": "6799eb6c178fd50ed831f04ed0245987e4e19b0107d7e7c129c7bc60d081ff16",
+      "previous_normalized_sha256": "db6294875264dbce8947892d9df72c6574ca5eef6527526a2662684aa82c09ab",
+      "current_normalized_sha256": "db6294875264dbce8947892d9df72c6574ca5eef6527526a2662684aa82c09ab"
+    }
+  ]
+}

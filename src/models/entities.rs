@@ -19,7 +19,7 @@ pub const PORNSTAR_THUMB_DIR: &str = "fox-images/pornstars";
 pub const CHANNEL_THUMB_DIR: &str = "fox-images/channels";
 
 /// Default page size for `/pornstars` and `/channels` grids.
-pub const ENTITY_INDEX_PAGE_SIZE: u32 = 48;
+pub const ENTITY_INDEX_PAGE_SIZE: u32 = crate::models::pagination::DEFAULT_ENTITY_INDEX_PER_PAGE;
 
 /// Sort options shared by pornstar and channel index/profile listings.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

@@ -1,0 +1,461 @@
+{
+  "generated_at": "2026-06-26T21:36:32.535Z",
+  "tool": "compare-live-local-byte-parity.mjs",
+  "source_mode": "artifact",
+  "source_base": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/manifest.json",
+  "local_base_url": "http://127.0.0.1:19093",
+  "live_base_url": "https://pornsok.com",
+  "captured_source_dir": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26",
+  "captured_source_manifest": {
+    "generated_at": "2026-06-26T21:16:26.293Z",
+    "live_base_url": "https://pornsok.com",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 SOKSourceCapture/1.0",
+    "routes": [
+      {
+        "label": "home",
+        "route": "/",
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "file": "home.html",
+        "byte_length": 207287
+      },
+      {
+        "label": "categories",
+        "route": "/categories",
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "file": "categories.html",
+        "byte_length": 170811
+      },
+      {
+        "label": "pornstars",
+        "route": "/pornstars",
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "file": "pornstars.html",
+        "byte_length": 126224
+      },
+      {
+        "label": "channels",
+        "route": "/channels",
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "file": "channels.html",
+        "byte_length": 125499
+      },
+      {
+        "label": "privacy",
+        "route": "/page/privacy.html",
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "file": "privacy.html",
+        "byte_length": 112052
+      }
+    ]
+  },
+  "config": {
+    "search_term": "milf",
+    "skip_search": false,
+    "report_only": false,
+    "timeout_ms": 30000,
+    "extra_routes": [],
+    "source_mode": "artifact",
+    "accept_normalized": true
+  },
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "failed": 5,
+    "normalized_passed": 5,
+    "accepted": 5,
+    "acceptance_failed": 0,
+    "acceptance_mode": "exact_or_normalized",
+    "report_only": false,
+    "audit_status_counts": {
+      "normalized_dynamic_only": 5
+    }
+  },
+  "probes": [
+    {
+      "kind": "GET",
+      "label": "home",
+      "path": "/",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 207255,
+        "sha256": "0b6f73d5170d1c3147dcc8096a259aa88a93e8e68b4d3dde5ff45bd45f4febdb",
+        "normalized_byte_length": 206551,
+        "normalized_sha256": "2364cebee5867b642ab1bf3f12f0d5be95d4ccca9eb8890c5293ba89ad521c0f",
+        "final_url": "http://127.0.0.1:19093/",
+        "redirected": false,
+        "title": "Free Porn Videos & Hot 🌶️ Sex Movies | PornsOK.com",
+        "h1": [
+          "Top Trending Free Porn Videos"
+        ],
+        "canonical": "https://pornsok.com/",
+        "thumb_vid_count": 54,
+        "thumb_cat_count": 12,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 207287,
+        "sha256": "90b4e2c80588e2b03ab2c89073c7583ac23c448d81c1ecd20c1e3e1c78b8ff83",
+        "normalized_byte_length": 206551,
+        "normalized_sha256": "2364cebee5867b642ab1bf3f12f0d5be95d4ccca9eb8890c5293ba89ad521c0f",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/home.html",
+        "redirected": false,
+        "title": "Free Porn Videos & Hot 🌶️ Sex Movies | PornsOK.com",
+        "h1": [
+          "Top Trending Free Porn Videos"
+        ],
+        "canonical": "https://pornsok.com/",
+        "thumb_vid_count": 54,
+        "thumb_cat_count": 12,
+        "error": null
+      },
+      "source": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 207287,
+        "sha256": "90b4e2c80588e2b03ab2c89073c7583ac23c448d81c1ecd20c1e3e1c78b8ff83",
+        "normalized_byte_length": 206551,
+        "normalized_sha256": "2364cebee5867b642ab1bf3f12f0d5be95d4ccca9eb8890c5293ba89ad521c0f",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/home.html",
+        "redirected": false,
+        "title": "Free Porn Videos & Hot 🌶️ Sex Movies | PornsOK.com",
+        "h1": [
+          "Top Trending Free Porn Videos"
+        ],
+        "canonical": "https://pornsok.com/",
+        "thumb_vid_count": 54,
+        "thumb_cat_count": 12,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": true,
+      "normalized_hash_match": true,
+      "normalized_parity": true,
+      "exact_parity": false,
+      "exact_audit": {
+        "status": "normalized_dynamic_only",
+        "blockers": [
+          "cloudflare_edge_dynamic_bytes",
+          "cloudflare_tokenized_script_attrs_or_paths"
+        ],
+        "interpretation": "Raw bytes differ, but configured Cloudflare/dynamic-byte normalization produces identical bytes and SHA-256.",
+        "local_dynamic_byte_delta": 704,
+        "live_dynamic_byte_delta": 736,
+        "response_shape_match": true
+      }
+    },
+    {
+      "kind": "GET",
+      "label": "categories",
+      "path": "/categories",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 170729,
+        "sha256": "b5dc7a6dd5ef2e83be2eb585155bce844ad4ee48234ca70109c9236976b9b0e0",
+        "normalized_byte_length": 169935,
+        "normalized_sha256": "a720c46f743877ba810a345e63bd16babaa8aea24d3027bad1593aa8fe2cc093",
+        "final_url": "http://127.0.0.1:19093/categories",
+        "redirected": false,
+        "title": "Porn Categories: Hottest Sex Niches | PornsOK.com",
+        "h1": [
+          "Porn Video Categories"
+        ],
+        "canonical": "https://pornsok.com/categories",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 120,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 170811,
+        "sha256": "78b1700aef631a65b28bbb4e77319caf44708e5cabd5f049c41fa9c663f0a63c",
+        "normalized_byte_length": 169935,
+        "normalized_sha256": "a720c46f743877ba810a345e63bd16babaa8aea24d3027bad1593aa8fe2cc093",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/categories.html",
+        "redirected": false,
+        "title": "Porn Categories: Hottest Sex Niches | PornsOK.com",
+        "h1": [
+          "Porn Video Categories"
+        ],
+        "canonical": "https://pornsok.com/categories",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 120,
+        "error": null
+      },
+      "source": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 170811,
+        "sha256": "78b1700aef631a65b28bbb4e77319caf44708e5cabd5f049c41fa9c663f0a63c",
+        "normalized_byte_length": 169935,
+        "normalized_sha256": "a720c46f743877ba810a345e63bd16babaa8aea24d3027bad1593aa8fe2cc093",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/categories.html",
+        "redirected": false,
+        "title": "Porn Categories: Hottest Sex Niches | PornsOK.com",
+        "h1": [
+          "Porn Video Categories"
+        ],
+        "canonical": "https://pornsok.com/categories",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 120,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": true,
+      "normalized_hash_match": true,
+      "normalized_parity": true,
+      "exact_parity": false,
+      "exact_audit": {
+        "status": "normalized_dynamic_only",
+        "blockers": [
+          "cloudflare_edge_dynamic_bytes",
+          "cloudflare_tokenized_script_attrs_or_paths"
+        ],
+        "interpretation": "Raw bytes differ, but configured Cloudflare/dynamic-byte normalization produces identical bytes and SHA-256.",
+        "local_dynamic_byte_delta": 794,
+        "live_dynamic_byte_delta": 876,
+        "response_shape_match": true
+      }
+    },
+    {
+      "kind": "GET",
+      "label": "pornstars",
+      "path": "/pornstars",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 126142,
+        "sha256": "f0e73e62e7b325d6d8b80908379a1cae6b4b179d44ee51f51f622b9f868ec145",
+        "normalized_byte_length": 125993,
+        "normalized_sha256": "201dab1bb2671f6e05184e4466a7eec3c15cae325ea161882117f285c9c3bfc4",
+        "final_url": "http://127.0.0.1:19093/pornstars",
+        "redirected": false,
+        "title": "Best Pornstars and Models in Free Porn Videos | PornsOK.com",
+        "h1": [
+          "Top Trending Pornstars"
+        ],
+        "canonical": "https://pornsok.com/pornstars",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 126224,
+        "sha256": "8d48e6ff1e8c5a882a9ff4ea34c49ab7f01feb5ad6078183dc3ac5ba6427981e",
+        "normalized_byte_length": 125993,
+        "normalized_sha256": "201dab1bb2671f6e05184e4466a7eec3c15cae325ea161882117f285c9c3bfc4",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/pornstars.html",
+        "redirected": false,
+        "title": "Best Pornstars and Models in Free Porn Videos | PornsOK.com",
+        "h1": [
+          "Top Trending Pornstars"
+        ],
+        "canonical": "https://pornsok.com/pornstars",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "source": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 126224,
+        "sha256": "8d48e6ff1e8c5a882a9ff4ea34c49ab7f01feb5ad6078183dc3ac5ba6427981e",
+        "normalized_byte_length": 125993,
+        "normalized_sha256": "201dab1bb2671f6e05184e4466a7eec3c15cae325ea161882117f285c9c3bfc4",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/pornstars.html",
+        "redirected": false,
+        "title": "Best Pornstars and Models in Free Porn Videos | PornsOK.com",
+        "h1": [
+          "Top Trending Pornstars"
+        ],
+        "canonical": "https://pornsok.com/pornstars",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": true,
+      "normalized_hash_match": true,
+      "normalized_parity": true,
+      "exact_parity": false,
+      "exact_audit": {
+        "status": "normalized_dynamic_only",
+        "blockers": [
+          "cloudflare_edge_dynamic_bytes",
+          "cloudflare_tokenized_script_attrs_or_paths"
+        ],
+        "interpretation": "Raw bytes differ, but configured Cloudflare/dynamic-byte normalization produces identical bytes and SHA-256.",
+        "local_dynamic_byte_delta": 149,
+        "live_dynamic_byte_delta": 231,
+        "response_shape_match": true
+      }
+    },
+    {
+      "kind": "GET",
+      "label": "channels",
+      "path": "/channels",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 125417,
+        "sha256": "666da28a1d7efe916d0a993e131179460b6247b702acd136865ab36850bc7ceb",
+        "normalized_byte_length": 125268,
+        "normalized_sha256": "602ef382807e87a6d89185aa5895dc984f775ea5570504a3d2f238662aa0e4b7",
+        "final_url": "http://127.0.0.1:19093/channels",
+        "redirected": false,
+        "title": "Free Porn Channels: List of Best Sex Channels | PornsOK.com",
+        "h1": [
+          "Top Trending Porn Channels"
+        ],
+        "canonical": "https://pornsok.com/channels",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 125499,
+        "sha256": "3a9ee7f6c1c03c2ef2a21dfd016e98f59e14d2610aea25d596a6f9fe5a25f26e",
+        "normalized_byte_length": 125268,
+        "normalized_sha256": "602ef382807e87a6d89185aa5895dc984f775ea5570504a3d2f238662aa0e4b7",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/channels.html",
+        "redirected": false,
+        "title": "Free Porn Channels: List of Best Sex Channels | PornsOK.com",
+        "h1": [
+          "Top Trending Porn Channels"
+        ],
+        "canonical": "https://pornsok.com/channels",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "source": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 125499,
+        "sha256": "3a9ee7f6c1c03c2ef2a21dfd016e98f59e14d2610aea25d596a6f9fe5a25f26e",
+        "normalized_byte_length": 125268,
+        "normalized_sha256": "602ef382807e87a6d89185aa5895dc984f775ea5570504a3d2f238662aa0e4b7",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/channels.html",
+        "redirected": false,
+        "title": "Free Porn Channels: List of Best Sex Channels | PornsOK.com",
+        "h1": [
+          "Top Trending Porn Channels"
+        ],
+        "canonical": "https://pornsok.com/channels",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 60,
+        "error": null
+      },
+      "bytes_match": false,
+      "hash_match": false,
+      "normalized_bytes_match": true,
+      "normalized_hash_match": true,
+      "normalized_parity": true,
+      "exact_parity": false,
+      "exact_audit": {
+        "status": "normalized_dynamic_only",
+        "blockers": [
+          "cloudflare_edge_dynamic_bytes",
+          "cloudflare_tokenized_script_attrs_or_paths"
+        ],
+        "interpretation": "Raw bytes differ, but configured Cloudflare/dynamic-byte normalization produces identical bytes and SHA-256.",
+        "local_dynamic_byte_delta": 149,
+        "live_dynamic_byte_delta": 231,
+        "response_shape_match": true
+      }
+    },
+    {
+      "kind": "GET",
+      "label": "privacy",
+      "path": "/page/privacy.html",
+      "local": {
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "byte_length": 112052,
+        "sha256": "58e6c678d7211eecd82401cb7885ecc85577bb7531e17676cc8e95d6fd776868",
+        "normalized_byte_length": 111485,
+        "normalized_sha256": "db6294875264dbce8947892d9df72c6574ca5eef6527526a2662684aa82c09ab",
+        "final_url": "http://127.0.0.1:19093/page/privacy.html",
+        "redirected": false,
+        "title": "Privacy Policy - Pornsok.com",
+        "h1": [
+          "Privacy Policy - PornsOK.COM"
+        ],
+        "canonical": "https://pornsok.com/page/privacy.html",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 0,
+        "error": null
+      },
+      "live": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 112052,
+        "sha256": "001eb4ab2a73f8040f038ae6cc667dc065e7244395724315970ff4e989ee0b63",
+        "normalized_byte_length": 111485,
+        "normalized_sha256": "db6294875264dbce8947892d9df72c6574ca5eef6527526a2662684aa82c09ab",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/privacy.html",
+        "redirected": false,
+        "title": "Privacy Policy - Pornsok.com",
+        "h1": [
+          "Privacy Policy - PornsOK.COM"
+        ],
+        "canonical": "https://pornsok.com/page/privacy.html",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 0,
+        "error": null
+      },
+      "source": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "byte_length": 112052,
+        "sha256": "001eb4ab2a73f8040f038ae6cc667dc065e7244395724315970ff4e989ee0b63",
+        "normalized_byte_length": 111485,
+        "normalized_sha256": "db6294875264dbce8947892d9df72c6574ca5eef6527526a2662684aa82c09ab",
+        "final_url": "/Users/adeel/Downloads/sok/docs/raw/live-source-2026-06-26/privacy.html",
+        "redirected": false,
+        "title": "Privacy Policy - Pornsok.com",
+        "h1": [
+          "Privacy Policy - PornsOK.COM"
+        ],
+        "canonical": "https://pornsok.com/page/privacy.html",
+        "thumb_vid_count": 0,
+        "thumb_cat_count": 0,
+        "error": null
+      },
+      "bytes_match": true,
+      "hash_match": false,
+      "normalized_bytes_match": true,
+      "normalized_hash_match": true,
+      "normalized_parity": true,
+      "exact_parity": false,
+      "exact_audit": {
+        "status": "normalized_dynamic_only",
+        "blockers": [
+          "cloudflare_edge_dynamic_bytes",
+          "cloudflare_tokenized_script_attrs_or_paths",
+          "cloudflare_email_obfuscation_token"
+        ],
+        "interpretation": "Raw bytes differ, but configured Cloudflare/dynamic-byte normalization produces identical bytes and SHA-256.",
+        "local_dynamic_byte_delta": 567,
+        "live_dynamic_byte_delta": 567,
+        "response_shape_match": true
+      }
+    }
+  ]
+}

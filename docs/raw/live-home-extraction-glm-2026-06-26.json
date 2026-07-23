@@ -1,0 +1,276 @@
+{
+  "meta": {
+    "source_url": "https://pornsok.com/",
+    "fetched_utc": "2026-06-26T20:18:54Z (date header)",
+    "http_status": 200,
+    "cf_ray": "a11ee7609f6786b2-LHR",
+    "content_type": "text/html; charset=UTF-8",
+    "geo_cookie_iso_c": "DE",
+    "served_by": "cloudflare (cf-cache-status: DYNAMIC)",
+    "raw_byte_length": 206820,
+    "raw_char_length": 206712,
+    "newlines": 0,
+    "normalized_cf_stripped_byte_length": 204422,
+    "cf_bytes_removed_by_full_normalization": 2398,
+    "cf_normalization_rules": [
+      "remove <script src=\"/cdn-cgi/scripts/.../cloudflare-static/rocket-loader.min.js\" ...></script>",
+      "strip attribute  type=\"<rocket-loader-hash>-text/javascript\"",
+      "strip inline-event guard prefix  if (!window.__cfRLUnblockHandlers) return false;",
+      "strip attribute  data-cf-modified-<hash>-=\"\"",
+      "strip remaining __cfRLUnblockHandlers token"
+    ],
+    "rocket_loader_hash": "e5ce1c236f08498d926462c6",
+    "cf_stripped_bytes_script_and_type_only": 206294,
+    "cf_bytes_removed_script_and_type_only": 526,
+    "note_on_cf_normalization": "normalized_cf_stripped_byte_length uses FULL normalization (script+type+event-guard prefixes+data-cf-modified attrs); cf_stripped_bytes_script_and_type_only is the narrower rocket-loader-only figure."
+  },
+  "main": {
+    "open_byte_offset": 83731,
+    "close_byte_offset": 204891,
+    "main_block_byte_length_incl_closing_tag": 121167,
+    "open_tag": "<main class=\"cont center clearfix\">",
+    "h1": "Top Trending Free Porn Videos",
+    "filter_section_present": true,
+    "filter_options": {
+      "qty": [
+        "All (href=/)",
+        "HD (href=/?hd=1)"
+      ],
+      "sort": [
+        "Newest (href=/)",
+        "Most Viewed (href=/?sort=mv)",
+        "Most Commented (href=/?sort=mc)"
+      ]
+    }
+  },
+  "section_order_inside_main": [
+    {
+      "index": 1,
+      "name": "main_video_grid",
+      "byte_start": 83731,
+      "byte_end": 162654,
+      "title_h1": "Top Trending Free Porn Videos",
+      "wrapper": "<div class=\"thumbs-floats\">",
+      "cards": 42
+    },
+    {
+      "index": 2,
+      "name": "top_pornstars",
+      "byte_start": 162654,
+      "byte_end": 167069,
+      "section": "<section class=\"related-items\">",
+      "title_h2": "This Week's Best Pornstars",
+      "icon": "fa-star",
+      "all_button": {
+        "text": "All Pornstars",
+        "href": "/pornstars"
+      },
+      "wrapper": "<div class=\"all_pornstars related\" id=\"ajax_pornstars\">",
+      "thumb_cat_count": 6
+    },
+    {
+      "index": 3,
+      "name": "top_channels",
+      "byte_start": 167069,
+      "byte_end": 171603,
+      "section": "<section class=\"related-items\">",
+      "title_h2": "This Week's Best Channels",
+      "icon": "fa-tv",
+      "all_button": {
+        "text": "All Channels",
+        "href": "/channels"
+      },
+      "wrapper": "<div class=\"all_pornstars related\" id=\"ajax_channels\">",
+      "thumb_cat_count": 6
+    },
+    {
+      "index": 4,
+      "name": "related_tags",
+      "byte_start": 171603,
+      "byte_end": 179876,
+      "section": "<section class=\"related-tags\" id=\"ajax_tags\">",
+      "tag_link_count": 20
+    },
+    {
+      "index": 5,
+      "name": "watching_now",
+      "byte_start": 179876,
+      "byte_end": 204225,
+      "title_h2": "Videos Being Watched Now",
+      "icon": "fa-bullseye-pointer",
+      "refresh_button": {
+        "class": "button button-refresh",
+        "onclick": "refresh_watching_now()"
+      },
+      "wrapper": "<div class=\"thumbs-floats\"><div class=\"clearfix\"></div><div id=\"ajax_watching_now\">",
+      "thumb_vid_ssr_count": 12
+    },
+    {
+      "index": 6,
+      "name": "desc_text",
+      "byte_start": 204225,
+      "byte_end": 204891,
+      "section": "<section class=\"desc-text\">",
+      "type": "seo_footer_paragraph"
+    }
+  ],
+  "counts": {
+    "thumb_vid_total": 54,
+    "thumb_vid_main_grid": 42,
+    "thumb_vid_watching_now_ssr": 12,
+    "thumb_cat_total": 12,
+    "thumb_cat_pornstars": 6,
+    "thumb_cat_channels": 6,
+    "tag_links": 20,
+    "main_grid_cards_eager_direct_src": 6,
+    "main_grid_cards_lazy_data_original": 36,
+    "pagination_total_pages": 1239
+  },
+  "main_grid_cards": {
+    "total": 42,
+    "eager_direct_src_count": 6,
+    "lazy_data_original_count": 36,
+    "eager_img_pattern_exact": "<img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/videos/athena-faris-sneaks-out-of-alexs-gym-bag-joins-him-his-wifey-chloe-cherry-in-bed.jpg\" itemprop=\"contentUrl\" data-video=\"https://c.foxporn.tv/fox-images/videos/m-athena-faris-sneaks-out-of-alexs-gym-bag-joins-him-his-wifey-chloe-cherry-in-bed.mp4\" alt=\"Athena Faris Sneaks out of Alex's Gym Bag & Joins him & his wifey Chloe Cherry in Bed\" />",
+    "lazy_img_pattern_exact": "<img class=\"thumb-cover\" src=\"data:image/gif;base64,R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==\" data-original=\"https://c.foxporn.tv/fox-images/videos/foot-fetish-with-maddy-oreilly-jasmine-wolff-and-more.jpg\" data-video=\"https://c.foxporn.tv/fox-images/videos/m-foot-fetish-with-maddy-oreilly-jasmine-wolff-and-more.mp4\" alt=\"Foot Fetish with Maddy O'Reilly, Jasmine Wolff and more\" /><noscript><img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/videos/foot-fetish-with-maddy-oreilly-jasmine-wolff-and-more.jpg\" alt=\"Foot Fetish with Maddy O'Reilly, Jasmine Wolff and more\" itemprop=\"contentUrl\" /></noscript>",
+    "eager_note": "First 6 cards: <img> uses DIRECT src=jpg + itemprop=\"contentUrl\" + data-video; NO data-original, NO <noscript>. (≈ first 2 rows at 33.33% width)",
+    "lazy_note": "Remaining 36 cards: <img> src=gif placeholder + data-original=jpg + data-video, followed by <noscript><img src=jpg ... itemprop=\"contentUrl\"/></noscript>",
+    "per_card_metadata_fields": [
+      "href (/video/<slug>.html)",
+      "img src/data-original/data-video/alt",
+      "ttime duration (ISO PT__S + label)",
+      "tview views (rounded label e.g. 118K)",
+      "tlike like_pct (e.g. 71%)",
+      "datePublished",
+      "interactionStatistic WatchAction (exact view int)",
+      "interactionStatistic CommentAction (exact comment int, ONLY when comments>0)",
+      "thumb-title (itemprop=name)"
+    ],
+    "first_card_raw": "<div class=\"thumb vid\" itemscope=\"\" itemtype=\"http://schema.org/ImageObject\"> <a class=\"thumb-in\" href=\"/video/athena-faris-sneaks-out-of-alexs-gym-bag-joins-him-his-wifey-chloe-cherry-in-bed.html\" target=\"_blank\" itemprop=\"url\"> <div class=\"thumb-img\"> <div class=\"video-preview\"></div> <img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/videos/athena-faris-sneaks-out-of-alexs-gym-bag-joins-him-his-wifey-chloe-cherry-in-bed.jpg\" itemprop=\"contentUrl\" data-video=\"https://c.foxporn.tv/fox-images/videos/m-athena-faris-sneaks-out-of-alexs-gym-bag-joins-him-his-wifey-chloe-cherry-in-bed.mp4\" alt=\"Athena Faris Sneaks out of Alex's Gym Bag & Joins him & his wifey Chloe Cherry in Bed\" /> <div class=\"thumb-meta-top fx-row\"> <span class=\"ttime\" itemprop=\"duration\" content=\"PT703S\">11 min</span> </div> <div class=\"thumb-meta-bottom fx-row\"> <span class=\"tview\"><i class=\"fa fa-eye\"></i>118K</span> <span class=\"tlike\"><svg fill=\"#fff\"><use xlink:href=\"#thumb-up-svg\" /></svg><span>71%</span></span> </div> <meta itemprop=\"datePublished\" content=\"2026-04-18\"> <div itemprop=\"interactionStatistic\" itemscope itemtype=\"http://schema.org/InteractionCounter\"> <link itemprop=\"interactionType\" href=\"https://schema.org/WatchAction\" /> <meta itemprop=\"userInteractionCount\" content=\"118407\"> </div> <div itemprop=\"interactionStatistic\" itemscope=\"\" itemtype=\"http://schema.org/InteractionCounter\"> <link itemprop=\"interactionType\" href=\"https://schema.org/CommentAction\" /> <meta itemprop=\"userInteractionCount\" content=\"14\"> </div> </div> <div class=\"thumb-title\" itemprop=\"name\"> Athena Faris Sneaks out of Alex's Gym Bag & Joins him & his wifey Chloe Cherry in Bed </div> </a> </div> <!-- / thumb -->",
+    "last_card_raw": "<div class=\"thumb vid\" itemscope=\"\" itemtype=\"http://schema.org/ImageObject\"> <a class=\"thumb-in\" href=\"/video/jamie-foster-talking-22.html\" target=\"_blank\" itemprop=\"url\"> <div class=\"thumb-img\"> <div class=\"video-preview\"></div> <img class=\"thumb-cover\" src=\"data:image/gif;base64,R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==\" data-original=\"https://c.foxporn.tv/fox-images/videos/jamie-foster-talking-22.jpg\" data-video=\"https://c.foxporn.tv/fox-images/videos/m-jamie-foster-talking-22.mp4\" alt=\"Jamie Foster Talking 22\" /><noscript><img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/videos/jamie-foster-talking-22.jpg\" alt=\"Jamie Foster Talking 22\" itemprop=\"contentUrl\" /></noscript> <div class=\"thumb-meta-top fx-row\"> <span class=\"ttime\" itemprop=\"duration\" content=\"PT316S\">5 min</span> </div> <div class=\"thumb-meta-bottom fx-row\"> <span class=\"tview\"><i class=\"fa fa-eye\"></i>5.5K</span> <span class=\"tlike\"><svg fill=\"#fff\"><use xlink:href=\"#thumb-up-svg\" /></svg><span>82%</span></span> </div> <meta itemprop=\"datePublished\" content=\"2026-03-02\"> <div itemprop=\"interactionStatistic\" itemscope itemtype=\"http://schema.org/InteractionCounter\"> <link itemprop=\"interactionType\" href=\"https://schema.org/WatchAction\" /> <meta itemprop=\"userInteractionCount\" content=\"5505\"> </div> </div> <div class=\"thumb-title\" itemprop=\"name\"> Jamie Foster Talking 22 </div> </a> </div> <!-- / thumb -->",
+    "not_wide_class_applied_to_any_card": false,
+    "not_wide_note": "`.not-wide` appears ONLY in <style> CSS (3 occurrences: base rule + mobile @media overrides). No card carries a not-wide class in SSR."
+  },
+  "watching_now": {
+    "ssr_card_count": 12,
+    "has_sect_title": true,
+    "sect_title_html": "<div class=\"sect-title\"> <i class=\"fa fa-bullseye-pointer\"></i><h2>Videos Being Watched Now</h2> <div class=\"button button-refresh\" onclick=\"...refresh_watching_now()\" ...> <i class=\"fa fa-refresh\"></i> <span>Refresh</span> </div> </div>",
+    "wrapper": "<div class=\"thumbs-floats\"> <div class=\"clearfix\"></div> <div id=\"ajax_watching_now\">",
+    "first_card_raw": "<div class=\"thumb vid\" itemscope=\"\" itemtype=\"http://schema.org/ImageObject\"> <a class=\"thumb-in\" href=\"/video/indian-bhabhi-first-time-hard-anal-fuck-with-full-hindi-dirty-roleplay.html\" target=\"_blank\" itemprop=\"url\"> <div class=\"thumb-img\"> <div class=\"video-preview\"></div> <img class=\"thumb-cover\" src=\"data:image/gif;base64,R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==\" data-original=\"https://c.foxporn.tv/fox-images/videos/indian-bhabhi-first-time-hard-anal-fuck-with-full-hindi-dirty-roleplay.jpg\" data-video=\"https://c.foxporn.tv/fox-images/videos/m-indian-bhabhi-first-time-hard-anal-fuck-with-full-hindi-dirty-roleplay.mp4\" alt=\"Indian Bhabhi first Time Hard anal fuck with Full Hindi Dirty Roleplay\" /><noscript><img class=\"thumb-cover\" src=\"https://c.foxporn.tv/fox-images/videos/indian-bhabhi-first-time-hard-anal-fuck-with-full-hindi-dirty-roleplay.jpg\" alt=\"Indian Bhabhi first Time Hard anal fuck with Full Hindi Dirty Roleplay\" itemprop=\"contentUrl\" /></noscript> <div class=\"thumb-meta-top fx-row\"> <span class=\"ttime\" itemprop=\"duration\" content=\"PT1126S\">18 min</span> </div> <div class=\"thumb-meta-bottom fx-row\"> <span class=\"tview\"><i class=\"fa fa-eye\"></i>1.5M</span> <span class=\"tlike\"><svg fill=\"#fff\"><use xlink:href=\"#thumb-up-svg\" /></svg><span>76%</span></span> </div> <meta itemprop=\"datePublished\" content=\"2025-04-17\"> <div itemprop=\"interactionStatistic\" itemscope itemtype=\"http://schema.org/InteractionCounter\"> <link itemprop=\"interactionType\" href=\"https://schema.org/WatchAction\" /> <meta itemprop=\"userInteractionCount\" content=\"1495850\"> </div> <div itemprop=\"interactionStatistic\" itemscope itemtype=\"http://schema.org/InteractionCounter\"> <link itemprop=\"interactionType\" href=\"https://schema.org/CommentAction\" /> <meta itemprop=\"userInteractionCount\" content=\"101\"> </div> </div> <div class=\"thumb-title\" itemprop=\"name\">Indian Bhabhi first Time Hard anal fuck with Full Hindi Dirty Roleplay</div> </a> </div> <!-- / thumb -->",
+    "card_variant": "lazy (gif placeholder + data-original + noscript) for all 12",
+    "note": "SSR pre-renders 12 watching-now cards inside #ajax_watching_now; JS (update_watching_now AJAX) refreshes them. Not an empty placeholder."
+  },
+  "top_pornstars": {
+    "wrapper": "<div class=\"all_pornstars related\" id=\"ajax_pornstars\">",
+    "count": 6,
+    "hrefs": [
+      "/pornstar/gina-gerson",
+      "/pornstar/riley-reid",
+      "/pornstar/abella-danger",
+      "/pornstar/sweetie-fox",
+      "/pornstar/whitney-wright",
+      "/pornstar/kelly-aleman"
+    ],
+    "card_sample_raw": null,
+    "card_class": "thumb cat",
+    "anchor_class": "thumb-in",
+    "href_pattern": "/pornstar/<slug>"
+  },
+  "top_channels": {
+    "wrapper": "<div class=\"all_pornstars related\" id=\"ajax_channels\">",
+    "count": 6,
+    "hrefs": [
+      "/channel/teen-erotica",
+      "/channel/brazzers",
+      "/channel/bang-bros-network",
+      "/channel/oldje",
+      "/channel/reality-kings",
+      "/channel/blacked"
+    ],
+    "card_sample_raw": null,
+    "card_class": "thumb cat",
+    "anchor_class": "thumb-in",
+    "href_pattern": "/channel/<slug>"
+  },
+  "tags": {
+    "wrapper": "<section class=\"related-tags\" id=\"ajax_tags\">",
+    "count": 20,
+    "href_pattern": "/<slug>  (root-level category-style URLs, NOT /tag/<slug>)",
+    "href_samples": [
+      "/rough-sex",
+      "/babe",
+      "/young",
+      "/porn-for-women",
+      "/pussy-licking",
+      "/big-cock",
+      "/reality",
+      "/threesome",
+      "/petite",
+      "/natural-tits"
+    ],
+    "first_anchor_raw": "<a href=\"/rough-sex\" onMouseMove=\"if (!window.__cfRLUnblockHandlers) return false; ShowVisualBox(event, 'https://c.foxporn.tv/fox-images/categories/rough-sex-mini.jpg', false, false, 5000, 150, 'Rough sex')\" onMouseOut=\"if (!window.__cfRLUnblockHandlers) return false; HideVisualBox()\" data-cf-modified-e5ce1c236f08498d926462c6-=\"\">",
+    "hover_preview": "onMouseMove=ShowVisualBox(event,'https://c.foxporn.tv/fox-images/categories/<slug>-mini.jpg',false,false,5000,150,'<Label>') + onMouseOut=HideVisualBox()",
+    "note": "Tag anchors carry CF Rocket-Loader event-guard prefixes + data-cf-modified attr (see cloudflare section)."
+  },
+  "cloudflare_injections": {
+    "rocket_loader_hash": "e5ce1c236f08498d926462c6",
+    "hash_occurrences": 31,
+    "rocket_loader_script_tag": "<script src=\"/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js\" data-cf-settings=\"e5ce1c236f08498d926462c6-|49\" defer></script>",
+    "script_type_mangling_count": 8,
+    "__cfRLUnblockHandlers_injections": 42,
+    "data_cf_modified_attr_count": 22,
+    "affected_handlers": [
+      "onclick (watching-now refresh)",
+      "onMouseMove (tag hover)",
+      "onMouseOut (tag hover)"
+    ]
+  },
+  "pagination_raw": "<div class=\"page_nav\"><ul class=\"pagination\"><li class=\"active\"><span>1</span></li><li class=\"pag-num\"><a href=\"/2\">2</a></li><li class=\"pag-num\"><a href=\"/3\">3</a></li><li class=\"pag-num\"><a href=\"/4\">4</a></li><li class=\"pag-num\"><a href=\"/5\">5</a></li><li class=\"pag-num\"><a href=\"/6\">6</a></li><li class=\"pag-num\"><a href=\"/7\">7</a></li><li class=\"pag-num\"><a href=\"/8\">8</a></li><li class=\"pag-num\"><a href=\"/9\">9</a></li><li class=\"dots\">...</li><li class=\"pag-num\"><a href=\"/1239\">1239</a></li><li class=\"next\"><a href=\"/2\" rel=\"next\">Next ›</a></li></ul></div>",
+  "toptext_raw": "<p class=\"toptext\">Horny guys looking for the best free porn video don't need to look anywhere else. At <strong>PornsOK.com</strong>, the porno videos are just made for you! Just check out the huge variety of videos in our collection. Check out porno videos of your favorite sex position on this amazing porn website. From mature ladies to amateur babes, find everything you need to blow your mind all in one porn tube. One thing is for sure, PornsOK.com is the only porn website that you'll ever need.</p>",
+  "desc_text_raw": "<section class=\"desc-text\"> <p>Masturbating has never been this fun! With the free porn videos at <b><i>PornsOK</i></b>, enjoy porn in every category, all day every day. No matter where you are, you can never have too much of porno videos. Anytime you feel like blowing your load, just hop on to this awesome porn site and enjoy some free porn videos of your choosing. There isn't a single category that doesn't have a free porn video against it. There is no shortage of hot, steamy videos from the most beautiful babes on this porn tube. So, why wait? Join today for some action. Who knows? Maybe you'll get to enjoy some premium videos on the site.</p> </section>",
+  "ordering_and_limits_inferred": {
+    "main_grid": "42 video cards, newest-first (datePublished desc: 2026-04-18 ... 2026-03-02). Page 1 of 1239.",
+    "main_grid_eager_window": "first 6 cards eager-loaded (direct src); remaining 36 lazy (data-original). Aligns with lazyThreshold=2000 / ~2 visible rows.",
+    "top_pornstars": "6 entries, 'This Week's Best' (likely weekly top by views); refreshable via #ajax_pornstars.",
+    "top_channels": "6 entries, 'This Week's Best'; refreshable via #ajax_channels.",
+    "tags": "20 tag links (fixed set, not paginated); refreshable via #ajax_tags.",
+    "watching_now": "12 cards SSR; live 'currently watched' set, refreshable via refresh_watching_now() / update_watching_now AJAX."
+  },
+  "diff_risks_vs_local_index_html": {
+    "inspected_file": "templates/index.html (local main byte span 82549..87150, ~4.6KB template vs live main 121167 bytes rendered)",
+    "risks": [
+      "MISSING SECTIONS: local <main> renders only main_video_grid + pagination + desc-text. It does NOT render Top Pornstars, Top Channels, Related Tags, or Watching-Now. All 4 live sections are absent from local markup (their CSS rules exist in <style>, but no markup). This is the largest structural parity gap.",
+      "EAGER CARD VARIANT MISSING: local emits ONE card variant (lazy: gif placeholder + data-original + <noscript>) for all cards. Live uses 6 eager cards (direct src + itemprop=contentUrl, NO data-original/noscript) + 36 lazy. Byte parity impossible for first 6 cards.",
+      "COMMENTACTION INTERACTIONSTATISTIC MISSING: local card has only one interactionStatistic (WatchAction, content={{v.views}}). Live adds a SECOND <div itemprop=interactionStatistic CommentAction content=<comment_count>> whenever comments>0 (omitted when 0). Local omits it entirely.",
+      "VIEW COUNT DUAL REPRESENTATION: live shows rounded label (tview '118K') but exact integer in userInteractionCount (118407). Local must supply both a rounded label and an exact integer; verify v.views vs v.views_label() mapping.",
+      "ROCKET-LOADER HASH MISMATCH: local template bakes hash 602cd38cd0a3aa1adcef57de; live hash is e5ce1c236f08498d926462c6. Per-zone/per-time hash; byte comparison MUST normalize any *-text/javascript hash or every <script> tag differs.",
+      "CF EVENT-GUARD INJECTIONS: live injects 'if (!window.__cfRLUnblockHandlers) return false; ' into onclick/onMouseMove/onMouseOut and adds data-cf-modified-<hash>-=\"\" attrs (42 handler injections on homepage). Local static mirror has these baked with the OLD hash. Normalization required; otherwise tags hover + watching-now refresh markup diverges.",
+      "H1 / TOPTEXT / DESC TEXT ARE DATA-BOUND locally ({{ctx.page.h1}}, {{page.seo_intro}}, {{page.seo_footer}}); live values are 'Top Trending Free Porn Videos', the toptext paragraph, and the desc-text paragraph. Ensure seed data matches these exact strings.",
+      "PAGINATION PAGE-1 SHAPE: live page 1 has NO '‹ Prev' (only Next ›), shows 1(active),2-9,…,1239. Local {% if item.is_previous() %} branch must be suppressed on page 1 (appears correct) and total page count (1239) must come from data.",
+      "THUMB_CSS_CLASS: local uses class=\"{{ v.thumb_css_class() }}\"; live main-grid cards are exactly 'thumb vid' and cat cards are 'thumb cat'. Ensure helper emits bare 'thumb vid'/'thumb cat' with no extra classes (no not-wide on homepage)."
+    ]
+  },
+  "uncertainty": [
+    "Eager card count = 6 inferred from 'no data-original' split; root cause (fixed count vs lazyThreshold/viewport) not confirmed from source. Stable across fetch but could vary with device/geo cookies (is_mob=0, iso_c=DE).",
+    "Content is geo/personalized via cookies (iso_c, alpha, seb_n, mkr_ch, biz_rng); a different geo or mobile UA may change card set, eager window, or section contents. This capture is desktop/DE.",
+    "CF-stripped byte length (206294 base; lower with full handler/attr stripping) is an estimate of origin HTML; true origin bytes unobtainable behind Cloudflare. The 526-byte figure covers rocket-loader script + type attrs only; full normalization (handlers + data-cf-modified) removes more.",
+    "Tag hrefs use root slugs (/rough-sex) which on pornsok resolve as category pages; whether the data model treats these as 'tags' or 'categories' is a modeling decision, not certain from HTML alone."
+  ],
+  "byte_offsets_summary": {
+    "main_open": 83731,
+    "main_close": 204891,
+    "main_block_bytes": 121167,
+    "sections": [
+      162654,
+      167069,
+      171603,
+      204225
+    ],
+    "ajax_wrappers": {
+      "ajax_pornstars": 162919,
+      "ajax_channels": 167329,
+      "ajax_tags": 171633,
+      "ajax_watching_now": 180197
+    },
+    "watching_now_title": 179876
+  }
+}

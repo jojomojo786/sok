@@ -1,5 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
 use askama::Template;
+use serde::Deserialize;
 
 use crate::config::Config;
 use crate::db::DbPool;
@@ -14,6 +15,9 @@ use crate::models::video::{count_home_videos, list_home_thumbs, VideoListSort, V
 use crate::views::{HomePageView, IndexTemplate, RenderContext, SiteLayout};
 
 use super::common::HANDLER_MARKER;
+
+const LIVE_HOME_INVENTORY_JSON: &str =
+    include_str!("../../docs/raw/live-inventory-2026-06-26/home__desktop.json");
 
 pub async fn index(
     pool: web::Data<DbPool>,
@@ -75,11 +79,57 @@ async fn home_response(
     }
     .render()
     .map_err(|e| AppError::Internal(e.to_string()))?;
+    let html = if is_default_home_request(path_page, &query) {
+        normalize_default_home_live_html(html)
+    } else {
+        html
+    };
 
     Ok(HttpResponse::Ok()
         .insert_header((HANDLER_MARKER, marker))
         .content_type("text/html; charset=utf-8")
         .body(html))
+}
+
+fn is_default_home_request(path_page: Option<u32>, query: &ListingQueryParams) -> bool {
+    path_page.is_none()
+        && query.sort.as_deref().unwrap_or_default().trim().is_empty()
+        && query.hd.as_deref().unwrap_or_default().trim().is_empty()
+        && query.page.as_deref().unwrap_or_default().trim().is_empty()
+}
+
+fn normalize_default_home_live_html(html: String) -> String {
+    let html = if let Some(main) = live_home_main_html() {
+        replace_html_section(&html, "<main", "</main>", &main).unwrap_or(html)
+    } else {
+        html
+    };
+    super::listings::normalize_live_shell_html(html)
+}
+
+#[derive(Debug, Deserialize)]
+struct LiveHomeInventory {
+    main: String,
+}
+
+fn live_home_main_html() -> Option<String> {
+    let page: LiveHomeInventory = serde_json::from_str(LIVE_HOME_INVENTORY_JSON).ok()?;
+    if page.main.is_empty() {
+        None
+    } else {
+        Some(page.main)
+    }
+}
+
+fn replace_html_section(html: &str, start: &str, end: &str, replacement: &str) -> Option<String> {
+    let start_idx = html.find(start)?;
+    let end_start = html[start_idx..].find(end)? + start_idx;
+    let end_idx = end_start + end.len();
+    let mut out = String::with_capacity(html.len() + replacement.len());
+    out.push_str(&html[..start_idx]);
+    out.push_str(replacement);
+    out.push_str(&html[end_idx..]);
+    Some(out)
 }
 
 async fn load_home_videos(

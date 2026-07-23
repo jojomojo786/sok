@@ -101,6 +101,17 @@ async fn post_search_help_echoes_text_and_group_item_shapes() {
 }
 
 #[actix_web::test]
+async fn post_search_help_milf_matches_live_sample_body() {
+    let resp = post_search_help("text=milf").await;
+    assert_eq!(resp.status(), StatusCode::OK);
+    let body = test::read_body(resp).await;
+    assert_eq!(
+        body.as_ref(),
+        include_bytes!("../docs/raw/search_help.body")
+    );
+}
+
+#[actix_web::test]
 async fn post_search_help_empty_query_returns_default_suggestions() {
     let resp = post_search_help("text=").await;
     assert_eq!(resp.status(), StatusCode::OK);
